@@ -17,7 +17,7 @@ public class Initializer {
 	private static ArrayList<Country> CountryList = new ArrayList<Country>(); 
 	private static ArrayList<Card> Cards = new ArrayList<Card>();
 	private static ArrayList<Player> tempPlayer = new ArrayList<Player>();
-	
+
 	public Player[] CreatePlayers()
 	{	
 		System.out.println("=^-^= WELCOME TO THE GAME OF RISK =^-^=");
@@ -28,6 +28,7 @@ public class Initializer {
 		return determineTurns();
 		//return this.players;
 	}
+
 	public void setupGame()
 	{
 		Scanner keyboard = new Scanner(System.in);	// To get user input
@@ -134,7 +135,6 @@ public class Initializer {
 			System.out.println((i+1) + " : "+ players[i].getPlayerName());
 			this.players[i].setPlayerID(i);
 		}
-		
 		return this.players;
 	}
 	 public static ArrayList<Country> CreateCountries() 
