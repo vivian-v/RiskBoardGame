@@ -29,5 +29,34 @@ public class Board {
 		
 		
 	}
-	
+
+	public void setupCountryIndex()
+	{
+		countriesIdx = new ArrayList<String>();
+		
+		for (int i = 0; i < countries.size(); i++)
+		{
+			countriesIdx.add(countries.get(i).getCountryName());
+		}
+	}
+
+
+	public int getCountryIndex(String c)
+	{
+		if (countriesIdx.contains(c))
+		{
+			countryIndex = countriesIdx.indexOf(c);
+			return countryIndex;
+		}
+		return -1;
+	}
+	public int getPlayerIndex(String c)
+	{
+		for (int i = 0; i < players.length; i++)
+		{
+			if (players[i].getPlayerName().equals(c))
+				return i;
+		}
+		return -1;
+  }
 }
