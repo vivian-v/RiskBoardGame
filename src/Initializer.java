@@ -10,12 +10,15 @@ public class Initializer {
 	private int numPlayers = 0;
 	private int NumOfTroops = 0;
 	private int[] turnOrder;
+	private Player[] players = null;
+	private Player[] tempPlayers = null;
+	private Dice dice = new Dice();
 	private static String[] nameList;
 	private static ArrayList<Country> CountryList = new ArrayList<Country>(); 
-//	private static ArrayList<Card> Cards = new ArrayList<Card>();
-//	private static ArrayList<Player> tempPlayer = new ArrayList<Player>();
+	private static ArrayList<Card> Cards = new ArrayList<Card>();
+	private static ArrayList<Player> tempPlayer = new ArrayList<Player>();
 	
-	
+
 	 public static ArrayList<Country> CreateCountries() 
 	 {
 
@@ -58,5 +61,33 @@ public class Initializer {
 	        }
 			return CountryList;
 	 }
-	
+	public static ArrayList<Card> CreateCards()
+	{
+		String fileName = "Cards.txt";
+		String line = null;
+		
+		try 
+        {
+            FileReader fileReader = new FileReader(fileName);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+            while((line = bufferedReader.readLine()) != null) 
+            {
+            	nameList = line.split(",");
+            	Cards.add(new Card(nameList[0], nameList[1]));
+            }   
+              
+            bufferedReader.close();         
+        }
+        catch(FileNotFoundException ex)
+        {
+            System.out.println("Unable to open file ' '");                
+        }
+        catch(IOException ex) 
+        {
+            System.out.println("Error reading file ''");                  
+
+        }
+		return Cards;
+	}
 }
