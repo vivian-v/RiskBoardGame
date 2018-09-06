@@ -17,8 +17,62 @@ public class Initializer {
 	private static ArrayList<Country> CountryList = new ArrayList<Country>(); 
 	private static ArrayList<Card> Cards = new ArrayList<Card>();
 	private static ArrayList<Player> tempPlayer = new ArrayList<Player>();
-	
 
+	// no constructor 
+	
+	public void setupGame()
+	{
+		Scanner keyboard = new Scanner(System.in);	// To get user input
+		do
+		{		
+			System.out.println("How many players are playing? 2~6 : ");
+	    	try 
+	    	{
+	    		numPlayers = keyboard.nextInt();
+	    	}
+		    catch (Exception e)
+		    {
+		    	System.out.println("Invalid input. Please enter a whole number between 2 - 6");
+		    	keyboard.next(); // Discard bad input
+		    }
+		}
+		while(numPlayers > 6 || numPlayers < 2);
+
+		NumOfTroops = 24 - ((numPlayers - 2) * 5);
+		System.out.println("Each player gets " + NumOfTroops + " troops.\n");
+		
+	}
+	public void setupPlayer(int numTroops) 
+	{
+		Scanner keyboard = new Scanner(System.in);
+		String userInput;
+		
+		for (int i = 0; i < this.numPlayers; i++) 
+		{
+			System.out.print("Enter name for Player " + (i+1) + ": ");
+			userInput = keyboard.nextLine();
+			Player newPlayer = new Player(userInput, numTroops);
+			players[i] = newPlayer;	
+		}
+		System.out.println();
+	}
+	public Player[] determineTurns() 
+	{
+		tempPlayers = new Player[numPlayers];
+		
+		int num = numPlayers;
+		int currentHighest = 0;//initialize to 0, will be changed as dice being roll
+		int diceRolled;
+		int dirNum = 0;
+		
+		//players who got the highest roll
+		ArrayList<Integer> highest = new ArrayList<Integer>();
+		
+		//clone of highest
+		ArrayList<Integer> tie = new ArrayList<Integer>();
+// not done
+		return this.players;
+	}
 	 public static ArrayList<Country> CreateCountries() 
 	 {
 
