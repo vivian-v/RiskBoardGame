@@ -29,6 +29,7 @@ public class Board {
 		
 		
 	}
+
 	public void setupCountryIndex()
 	{
 		countriesIdx = new ArrayList<String>();
@@ -57,7 +58,5 @@ public class Board {
 				return i;
 		}
 		return -1;
-	}
-	
-
+  }
 }
