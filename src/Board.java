@@ -82,7 +82,27 @@ public class Board {
 		}
 		return -1;
 	}
-	
+
+//	public void Reinforce(int n) //player index is being passed into parameter
+//    {
+//        // Troops based on the number of territories you occupy divided by 3 and truncated
+//        int troopsByTerritory = players[n].getNumTerritoriesOwned() / 3;
+//        System.out.println("You [" + players[n].getPlayerName() + "] own " + players[n].getNumTerritoriesOwned() + 
+//                "territories. You get " + troopsByTerritory + " bonus troops.");
+//
+//        // Troops based on the value of the continents you control.
+//        int troopsByRegion = 0;
+//        
+//        int[] x = {9, 4, 7, 6, 12, 4};
+//        
+//        
+//        // print out which region they own 
+//        System.out.println("You gain " + troopsByRegion + " total troops for the regions you own.");
+//
+//        // -200 IQ
+//
+//        // the value of the matched sets of RISK cards you trade in.
+//    }
 
 	public void displayPlayerInfo(int n)
 	{
@@ -140,6 +160,7 @@ public class Board {
 					System.out.println(i + 1 + " : " + countries.get(i).getCountryName());	
 				}
 			}			
+
 			if (!check)
 			{
 				do
