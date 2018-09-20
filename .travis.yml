@@ -4,4 +4,4 @@ install: true
 jdk:
   - oraclejdk8
 
-script: mvn -f src/pom.xml test
+script: mvn test
