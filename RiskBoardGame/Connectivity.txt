@@ -1,0 +1,42 @@
+North America,Alberta,Northwest Territory,Kamchatka
+North America,Alaska,Northwest Territory,Ontario,Western United States
+North America,Western United States,Venezuela
+North America,Western United States,Ontario,Quebec
+North America,Northwest Territory,Ontario,Quebec,Iceland
+North America,Alaska,Greenland,Ontario,Alberta
+North America,Northwest Territory,Greenland,Quebec,Eastern United States,Western United States,Alberta
+North America,Ontario,Greenland,Eastern United States
+North America,Alberta,Ontario,Eastern United States,Central America
+South America,Venezuela,Brazil
+South America,Venezuela,North Africa,Argentina,Peru
+South America,Brazil,Venezuela,Argentina
+South America,Central America,Brazil,Peru
+Europe,Iceland,Scandinavia,Northern Europe,Western Europe
+Europe,Greenland,Great Britain
+Europe,Great Britain,Ukraine,Southern Europe,Western Europe
+Europe,Great Britain,Ukraine
+Europe,Western Europe,Northern Europe,Ukraine,Egypt,North Africa
+Europe,Scandinavia,Ural,Afghanistan,Middle East,Southern Europe,Northern Europe
+Europe,Great Britain,Northern Europe,Southern Europe,North Africa
+Africa,North Africa,Egypt,East Africa,South Africa
+Africa,Egypt,Madagascar,South Africa,Congo
+Africa,Southern Europe,Middle East,East Africa,Congo,North Africa
+Africa,East Africa,South Africa
+Africa,Western Europe,Southern Europe,Egypt,Congo,Brazil
+Africa,Congo,East Africa,Madagascar
+Asia,Ukraine,Ural,Siberia,China,India,Middle East
+Asia,Afghanistan,Siberia,Mongolia,Siam,India
+Asia,Middle East,Afghanistan,China,Siam
+Asia,Siberia,Yakutsk,Kamchatka,Mongolia
+Asia,Kamchatka,Mongolia
+Asia,Yakutsk,Alaska,Japan,Mongolia,Irkutsk
+Asia,Ukraine,Afghanistan,India,Egypt
+Asia,Siberia,Irkutsk,Kamchatka,Japan,China
+Asia,India,China,Indonesia
+Asia,Ural,Yakutsk,Irkutsk,Mongolia,China,Afghanistan
+Asia,Ukraine,Siberia,Afghanistan
+Asia,Siberia,Kamchatka,Irkutsk
+Australia,New Guinea,Indonesia,Western Australia
+Australia,Siam,New Guinea,Western Australia
+Australia,Indonesia,Eastern Australia,Western Australia
+Australia,Western Australia,Indonesia,New Guinea,Eastern Australia
