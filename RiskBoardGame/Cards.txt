@@ -1,0 +1,42 @@
+Alaska,Solider
+Alberta,Horse
+Central America,Canon
+Eastern United States,Canon
+Greenland,Horse
+Northwest Territory,Canon
+Ontario,Horse
+Quebec,Canon
+Western United States,Canon
+Argentina,Solider
+Brazil,Canon
+Peru,Solider
+Venezuela,Solider
+Great Britain,Canon
+Iceland,Solider
+Northern Europe,Canon
+Scandinavia,Horse
+Southern Europe,Canon
+Ukraine,Canon
+Western Europe,Canon
+Congo,Canon
+East Africa,Solider
+Egypt,Solider
+Madagascar,Horse
+North Africa,Horse
+South Africa,Canon
+Afghanistan,Horse
+China,Solider
+India,Horse
+Irkutsk,Horse
+Japan,Canon
+Kamchatka,Solider
+Middle East,Solider
+Mongolia,Solider
+Siam,Canon
+Siberia,Horse
+Ural,Horse
+Yakutsk,Horse
+Eastern Australia,Canon
+Indonesia,Canon
+New Guinea,Solider
+Western Australia,Canon
