@@ -6,3 +6,5 @@ jdk:
 install: true
 
 script: mvn test
+
+
