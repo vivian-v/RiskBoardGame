@@ -1,5 +1,3 @@
-package demo3;
-
 import java.util.Random;
 import java.util.Arrays;
 
