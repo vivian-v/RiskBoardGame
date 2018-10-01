@@ -1,14 +1,40 @@
+package demo3;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Risk {
 
+	
 	public static void main(String[] args) {
 
-		Initializer setup = new Initializer();
+		Setup setup = new Setup();
 
-		Board RiskBoard = new Board(setup.loadPlayers(), setup.loadCountryIndex() ,setup.loadMap(), setup.loadDeck(), new Dice());
-		RiskBoard.GameStart();	
+		
+		
+		Board newBoard = new Board(setup.LoadMap(), setup.setupPlayer(2));
+		
+		
+		ArrayList<Player> p = new ArrayList<Player>();
+		
+	
+		
+//		p.add(setup.createPlayerObject("Chang", 1));
+//		p.add(setup.createPlayerObject("Vincent", 1));
+//		p.add(setup.createPlayerObject("Vivian",1));
+		
+//		for (int i = 0; i < p.size(); i++)
+//		{
+//			System.out.println(p.get(i).getPlayerName());
+//		}
+//
+//		p = setup.DetermineTurn(p);
+//		
+//		for (int i = 0; i < p.size(); i++)
+//		{
+//			System.out.println(p.get(i).getPlayerName());
+//		}
 	}
+
+	
 
 }
