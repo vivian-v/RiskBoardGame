@@ -1,108 +1,86 @@
+package demo3;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 
-public class Player {
-	private String playerName;
-	private int numTroops;
-	private int playerID;
+public class Player  {
+	
+	private int numOfTroops;
     private int [] countriesOwnedByRegions;
+
+	private String playerName;
+	private String[] regionNames = {"Africa", "Asia", "Australia", "Europe", "North America", "South America"};;
+
 	private ArrayList<Country> ownedCountries;
-	private String[] regionNames = {"Africa", "Asia", "Australia", "Europe", "North America", "South America"};
 	private ArrayList<Card> cards;
-	public Player (String name, int num)
-	{
-		this.playerName = name;
-		this.numTroops = num;
+	
+	public Player(String s, int n)	{
+		this.playerName = s;
+		this.numOfTroops = n;
 		this.ownedCountries = new ArrayList<Country>();
-		this.countriesOwnedByRegions = new int[6];
 		this.cards = new ArrayList<Card>();
+		this.countriesOwnedByRegions = new int[6];
 	}
-	public void addCard(Card card)
+	public int getNumOfTroops()
 	{
-		this.cards.add(card);
-	}
-	
-	
-	public void takeCountry(Country country)
-	{
-		ownedCountries.add(country);
-		AddRegionHeld(country);
-	}
-	public void loseCountry(Country country)
-	{
-		ownedCountries.remove(country);
-		MinusRegionHeld(country);
-
-	}
-	public String getPlayerName()
-	{
-		return this.playerName;
-	}
-	public void setPlayerID(int id)
-	{
-		this.playerID = id;
-	}
-	public int getPlayerTroops()
-	{
-		return this.numTroops;
-	}
-	public void putOneAmry()
-	{
-		this.numTroops -= 1;
-	}
-	public int getTotalCountriesOwned()
-	{
-		return this.ownedCountries.size();
-	}
-	public ArrayList<Country> getOwnedCountries()
-	{
-		return this.ownedCountries;
-	}
-	public void MinusRegionHeld(Country country)
-	{
-		String tempStr = country.getContinentName();
-		
-		for (int i = 0; i < 6; i++)
-		{
-			if (regionNames[i].equals(tempStr))
-			{
-				this.countriesOwnedByRegions[i]--;
-				break;
-			}
-		}
-
+		return numOfTroops;
 	}
 	public boolean isPlayerDead()
 	{
-		return ownedCountries.size() < 1 ? true : false;
+		return this.ownedCountries.size() < 1 ? true : false;
 	}
-	public void AddRegionHeld(Country country)
-	{
-		String tempStr = country.getContinentName();
-		//System.out.println(tempStr);
-		for (int i = 0; i < 6; i++)
-		{
-			if (regionNames[i].equals(tempStr))
-			{
-				this.countriesOwnedByRegions[i]++;
-				break;
-			}
-		}
-		
-	}//end AddRegionHeld
+	
+	public String getPlayerName() {
+		return this.playerName;
+	}
+	
 	public int[] getCountriesOwnedByRegions()
 	{
 		return this.countriesOwnedByRegions;
 	}
-	public void addTroops(int n)
-	{
-		this.numTroops += n;
+	
+	public void setPlayerName(String n)	{
+		this.playerName = n;
 	}
-	public void showRegions()
+
+	public void setNumOfTroops(int n) {
+		this.numOfTroops += n;
+	}
+	
+	public void takeCountry(Country c) {
+		this.ownedCountries.add(c);
+		updateRegionHeld(c, 1);
+	}
+	
+	public void loseCountry(Country c) {
+		this.ownedCountries.remove(c);
+		updateRegionHeld(c, -1);
+
+	}
+	
+	public void addCard(Card c) {
+		this.cards.add(c);
+	}
+	
+	public Card drawCard()
 	{
-		for (int i = 0 ; i < countriesOwnedByRegions.length; i++)
-		{
-			System.out.println(countriesOwnedByRegions[i]);
+		return this.cards.remove(0);
+	}
+	public ArrayList<Card> getAllCards()
+	{
+		return this.cards;
+	}
+	public ArrayList<Country> getOwnedCountries() {
+		return this.ownedCountries;
+	}
+	
+	public void updateRegionHeld(Country c, int n) {
+		String tempStr = c.getContinentName();
+		for (int i = 0; i < 6; i++)	{
+			if (this.regionNames[i].equals(tempStr)) {
+				this.countriesOwnedByRegions[i] += n;
+				break;
+			}
 		}
 	}
+
 }
