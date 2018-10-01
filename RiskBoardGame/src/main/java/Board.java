@@ -18,33 +18,63 @@ public class Board {
 	UndoManager dd = new UndoManager();
 	private HashMap<String, Country> Map = new HashMap<String, Country>();
 	ArrayList<Player> Players = new ArrayList<Player>();
-
-	//private static 
-	int playerTurn = 0;
-	Country c1 = new Country("China");
-	Country c2 = new Country("Japan");
-	Country c3 = new Country("Korea");
-	Country c4 = new Country("Alberta");
-	Stack<HashMap<String, Country>> ss = new Stack();
-	Stacksys stack = new Stacksys();
-	ArrayList<ArrayList<Player>> aa = new ArrayList<ArrayList<Player>>();
+	Deck deck = new Deck();
+	UndoSystem actionController = new UndoSystem();
+	History history;
+	
+	
+	
 	public Board(HashMap<String, Country> m, ArrayList<Player> p)
 	{
+		int playerTurn = 0;
+		String actionStatus;
 		Map = m;
 		Players = p;
 		
+		actionStatus = armyPlacement(0);
+		history = new History(actionStatus, Players, Map, playerTurn, deck);
+		actionController.addActionRecord(history);
 		
-		armyPlacement(0);
-		reinforce(0);
-		attack(0,1);
-		fortify(0);
+		actionStatus = reinforce(0);
+		history = new History(actionStatus, Players, Map, playerTurn, deck);
+		actionController.addActionRecord(history);
+		
+		actionStatus = attack(0,1);
+		history = new History(actionStatus, Players, Map, playerTurn, deck);
+		actionController.addActionRecord(history);
+		
+		
+		playerTurn++;
+		actionStatus = armyPlacement(1);
+		history = new History(actionStatus, Players, Map, playerTurn, deck);
+		actionController.addActionRecord(history);
+		
+		actionStatus = reinforce(1);
+		history = new History(actionStatus, Players, Map, playerTurn, deck);
+		actionController.addActionRecord(history);
+		
+		actionStatus = attack(0,1);
+		history = new History(actionStatus, Players, Map, playerTurn, deck);
+		actionController.addActionRecord(history);
+		
+		this.actionController.undo();
+		this.actionController.undo();
+		this.actionController.undo();
+		this.actionController.undo();
+		this.actionController.undo();
+		this.actionController.undo();
+
+		
+//		reinforce(0);
+//		attack(0,1);
+//		fortify(0);
 //		System.out.println(Map.get("Alberta").getOwnerName());
 //		System.out.println(Map.get("Alaska").getOwnerName());
 //
 //		System.out.println(Map.get("Alberta").getNumOfArmy());
 	}
 
-	public void attack (int attackerIndex, int defenderIndex)
+	public String attack (int attackerIndex, int defenderIndex)
 	{
 		int[] attackerRolls;
 		int[] defenderRolls;
@@ -91,7 +121,8 @@ public class Board {
 		
 		System.out.println(numAttackerLose);
 		System.out.println(numDefenderLose);
-
+		
+		return "attack action";
 		
 	}
 	public boolean isAttackable(Country c1, Country c2)
@@ -114,7 +145,34 @@ public class Board {
 	{
 		Players.remove(playerIndex);
 	}
-
+	public String armyPlacement(int playerIndex)
+	{
+		
+		int index = 0;
+		int num = 4;
+		String pickedCountry = "Alberta";
+		
+		Map.get(pickedCountry).setOwnerName(Players.get(index).getPlayerName());
+		Map.get(pickedCountry).setNumOfArmy(num);
+		Players.get(playerIndex).setNumOfTroops(num * -1);
+		Players.get(playerIndex).takeCountry(Map.get(pickedCountry));
+		
+		//index++;
+		
+		pickedCountry = "Alaska";
+		Map.get(pickedCountry).setOwnerName(Players.get(index).getPlayerName());
+		Map.get(pickedCountry).setNumOfArmy(num);
+		Players.get(playerIndex).setNumOfTroops(num * -1);
+		Players.get(playerIndex).takeCountry(Map.get(pickedCountry));
+		
+		pickedCountry = "Central America";
+		Map.get(pickedCountry).setOwnerName(Players.get(index).getPlayerName());
+		Map.get(pickedCountry).setNumOfArmy(num);
+		Players.get(playerIndex).setNumOfTroops(num * -1);
+		Players.get(playerIndex).takeCountry(Map.get(pickedCountry));
+		
+		return "army placement action";
+	}
 
 	public Country fromCountry(String s)
 	{
@@ -127,6 +185,53 @@ public class Board {
 		return tc;
 	}
 
+	public String reinforce(int playerIndex)
+	{
+		
+		int totalTroops = 0;
+		int troopsByTerritory = 0;
+		int troopsByRegion = 0;
+		int troopsByCards = 0;
 
+		int[] fullRegion = {6, 12, 4, 7, 9, 4};
+		int[] bonusByRegion = {3, 7, 4, 5, 5, 2};
+		int[] countriesByRegions = Players.get(playerIndex).getCountriesOwnedByRegions();
+		
+		troopsByTerritory = Players.get(playerIndex).getOwnedCountries().size() / 3;
+		System.out.println(Players.get(playerIndex).getOwnedCountries().size());
 
+		for (int i = 0; i < fullRegion.length; i++)
+		{
+			if (countriesByRegions[i] == fullRegion[i])
+			{
+				troopsByRegion += bonusByRegion[i];
+			}
+		}
+		
+		System.out.println(troopsByTerritory + troopsByRegion);
+		
+		return "reinforce action";
+	}
+
+	public String fortify(int playerIndex)
+	{
+		int numTrasferArmy = 2;
+		Country fromCountry = fromCountry("Alberta");
+		Country toCountry = toCountry("Alaska");
+		
+		if (isFortifiable(fromCountry, toCountry))
+		{
+			Map.get(fromCountry.getCountryName()).setNumOfArmy(numTrasferArmy * -1);
+			Map.get(toCountry.getCountryName()).setNumOfArmy(numTrasferArmy);
+		}
+		return "fortify action";
+	}
+	public boolean isFortifiable(Country c1, Country c2)
+	{
+		if (!c1.getOwnerName().equals(c2.getOwnerName()) || c1.getNumOfArmy() < 2 && !c1.getAdjacency().contains(c2.getCountryName()))
+		{
+			return false;
+		}
+		return true;
+	}
 }
