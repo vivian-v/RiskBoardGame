@@ -29,18 +29,23 @@ public class Board {
 		Map = m;
 		Players = p;
 		
-		actionStatus = armyPlacement(0);
+		
+		
+		actionStatus = armyPlacement(playerTurn);
 		history = new History(actionStatus, Players, Map, playerTurn, deck);
 		actionController.addActionRecord(history);
 		
-		actionStatus = reinforce(0);
+		actionStatus = reinforce(playerTurn);
 		history = new History(actionStatus, Players, Map, playerTurn, deck);
 		actionController.addActionRecord(history);
 		
-		actionStatus = attack(0,1);
+		actionStatus = attack(playerTurn,1);
 		history = new History(actionStatus, Players, Map, playerTurn, deck);
 		actionController.addActionRecord(history);
 		
+		actionStatus = fortify(playerTurn);
+		history = new History(actionStatus, Players, Map, playerTurn, deck);
+		actionController.addActionRecord(history);
 		
 		playerTurn++;
 		actionStatus = armyPlacement(1);
@@ -55,6 +60,13 @@ public class Board {
 		history = new History(actionStatus, Players, Map, playerTurn, deck);
 		actionController.addActionRecord(history);
 		
+		
+		actionStatus = fortify(playerTurn);
+		history = new History(actionStatus, Players, Map, playerTurn, deck);
+		actionController.addActionRecord(history);
+		
+		this.actionController.undo();
+		this.actionController.undo();
 		this.actionController.undo();
 		this.actionController.undo();
 		this.actionController.undo();
