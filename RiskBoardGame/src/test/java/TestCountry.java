@@ -1,5 +1,3 @@
-package demo3;
-
 
 
 import org.junit.Before;
