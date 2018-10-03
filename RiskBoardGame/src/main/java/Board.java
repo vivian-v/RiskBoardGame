@@ -1,6 +1,8 @@
 import java.io.ByteArrayInputStream;
 import javax.swing.undo.UndoManager;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
@@ -19,60 +21,81 @@ public class Board {
 	Deck deck = new Deck();
 	UndoSystem actionController = new UndoSystem();
 	History history;
+	ReplayS3 replay = new ReplayS3();
+	ArrayList<String> s = new ArrayList<String>();
+	File file;
 	
-	
-	
-	public Board(HashMap<String, Country> m, ArrayList<Player> p)
+	public Board(HashMap<String, Country> m, ArrayList<Player> p) throws IOException
 	{
 		int playerTurn = 0;
 		String actionStatus;
 		Map = m;
 		Players = p;
-		
+		replay.createBucket();
+		replay.listBuckets();
 		
 		
 		actionStatus = armyPlacement(playerTurn);
 		history = new History(actionStatus, Players, Map, playerTurn, deck);
 		actionController.addActionRecord(history);
+		s.add(Players.get(playerTurn).getPlayerName() + " " + actionStatus + "\n");
+		
 		
 		actionStatus = reinforce(playerTurn);
 		history = new History(actionStatus, Players, Map, playerTurn, deck);
 		actionController.addActionRecord(history);
+		s.add(Players.get(playerTurn).getPlayerName() + " " + actionStatus + "\n");
+
 		
 		actionStatus = attack(playerTurn,1);
 		history = new History(actionStatus, Players, Map, playerTurn, deck);
 		actionController.addActionRecord(history);
+		s.add(Players.get(playerTurn).getPlayerName() + " " + actionStatus + "\n");
+
 		
 		actionStatus = fortify(playerTurn);
 		history = new History(actionStatus, Players, Map, playerTurn, deck);
 		actionController.addActionRecord(history);
+		s.add(Players.get(playerTurn).getPlayerName() + " " + actionStatus + "\n");
+
 		
 		playerTurn++;
 		actionStatus = armyPlacement(1);
 		history = new History(actionStatus, Players, Map, playerTurn, deck);
 		actionController.addActionRecord(history);
-		
+		s.add(Players.get(playerTurn).getPlayerName() + " " + actionStatus + "\n");
+
 		actionStatus = reinforce(1);
 		history = new History(actionStatus, Players, Map, playerTurn, deck);
 		actionController.addActionRecord(history);
+		s.add(Players.get(playerTurn).getPlayerName() + " " + actionStatus + "\n");
+
 		
 		actionStatus = attack(0,1);
 		history = new History(actionStatus, Players, Map, playerTurn, deck);
 		actionController.addActionRecord(history);
+		s.add(Players.get(playerTurn).getPlayerName() + " " + actionStatus + "\n");
+
 		
 		
 		actionStatus = fortify(playerTurn);
 		history = new History(actionStatus, Players, Map, playerTurn, deck);
 		actionController.addActionRecord(history);
+		s.add(Players.get(playerTurn).getPlayerName() + " " + actionStatus + "\n");
+
 		
-		this.actionController.undo();
-		this.actionController.undo();
-		this.actionController.undo();
-		this.actionController.undo();
-		this.actionController.undo();
-		this.actionController.undo();
-		this.actionController.undo();
-		this.actionController.undo();
+		file = replay.createFile(s);
+		replay.putObject(file);
+		replay.downloadObject();
+		
+//		this.actionController.undo();
+//		this.actionController.undo();
+//		this.actionController.undo();
+//		this.actionController.undo();
+//		this.actionController.undo();
+//		this.actionController.undo();
+//		this.actionController.undo();
+//		this.actionController.undo();
 
 		
 //		reinforce(0);
@@ -128,9 +151,7 @@ public class Board {
 			}
 	
 		}
-		
-		System.out.println(numAttackerLose);
-		System.out.println(numDefenderLose);
+
 		
 		return "attack action";
 		
@@ -208,7 +229,7 @@ public class Board {
 		int[] countriesByRegions = Players.get(playerIndex).getCountriesOwnedByRegions();
 		
 		troopsByTerritory = Players.get(playerIndex).getOwnedCountries().size() / 3;
-		System.out.println(Players.get(playerIndex).getOwnedCountries().size());
+//		System.out.println(Players.get(playerIndex).getOwnedCountries().size());
 
 		for (int i = 0; i < fullRegion.length; i++)
 		{
@@ -218,7 +239,7 @@ public class Board {
 			}
 		}
 		
-		System.out.println(troopsByTerritory + troopsByRegion);
+		//System.out.println(troopsByTerritory + troopsByRegion);
 		
 		return "reinforce action";
 	}
