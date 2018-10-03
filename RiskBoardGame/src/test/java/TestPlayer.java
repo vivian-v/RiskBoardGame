@@ -36,10 +36,12 @@ public class TestPlayer extends TestCase {
     	assertEquals("Vincent", test.getPlayerName());
     }
 	@Test
+	@Test
 	public void testSetNumOfTroops()
 	{
 		test.setNumOfTroops(20);
-		assertEquals(20, test.getNumOfTroops());
+		//test start with 40 troops, functino +20 
+		assertEquals(60, test.getNumOfTroops());
 	}
 	@Test
 	public void testTakeCountry()
