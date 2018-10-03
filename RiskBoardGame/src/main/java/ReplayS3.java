@@ -107,11 +107,8 @@ public class ReplayS3 {
         file.deleteOnExit();
 
         Writer writer = new OutputStreamWriter(new FileOutputStream(file));
-        writer.write("Chang is God\n");
-//        writer.write("01234567890112345678901234\n");
-//        writer.write("!@#$%^&*()-=[]{};':',.<>/?\n");
-//        writer.write("01234567890112345678901234\n");
-//        writer.write("abcdefghijklmnopqrstuvwxyz\n");
+        writer.write("Test\n");
+
         writer.close();
 
         return file;
