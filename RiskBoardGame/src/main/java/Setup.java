@@ -153,7 +153,7 @@ public class Setup {
 	 }
 	public int setupNumOfPlayers()
 	{
-		Scanner keyboard = new Scanner(System.in);
+		/*Scanner keyboard = new Scanner(System.in);
 		int numPlayers = 0;
 		do{		
 			System.out.println("How many players are playing? 2~6 : ");
@@ -165,21 +165,22 @@ public class Setup {
 		    	keyboard.next(); // Discard bad input
 		    }
 		}
-		while(numPlayers > 6 || numPlayers < 2);
+		while(numPlayers > 6 || numPlayers < 2);*/
 		
-		return numPlayers;
+		return 4;
 		//this.players = new Player[numPlayers];
 	}
 	public ArrayList<Player> setupPlayer(int numPlayers)
 	{
 		ArrayList<Player> players = new ArrayList<Player>();
-		Scanner keyboard = new Scanner(System.in);
+		//Scanner keyboard = new Scanner(System.in);
 		String userInput;
 		int NumTroops = 40 - ((numPlayers - 2) * 5);
 		for (int i = 0; i < numPlayers; i++) 
 		{
 			System.out.print("Enter name for Player " + (i+1) + ": ");
-			userInput = keyboard.nextLine();
+			//userInput = keyboard.nextLine();
+			userInput = "Chang";
 			Player newPlayer = new Player(userInput, NumTroops);
 			players.add(newPlayer);
 		}
