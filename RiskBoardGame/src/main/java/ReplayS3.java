@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.UUID;
 
 import com.amazonaws.AmazonClientException;
@@ -68,16 +69,16 @@ public class ReplayS3 {
          }
          System.out.println();
 	}
-	public void putObject() throws IOException
+	public void putObject(File file) throws IOException
 	{
 		System.out.println("Uploading a new object to S3 from a file\n");
-        s3.putObject(new PutObjectRequest(bucketName, key, createSampleFile()));
+        s3.putObject(new PutObjectRequest(bucketName, key, file));
 	}
 	public void downloadObject() throws IOException
 	{
-		System.out.println("Downloading an object");
+		System.out.println("Downloading replay");
         S3Object object = s3.getObject(new GetObjectRequest(bucketName, key));
-        System.out.println("Content-Type: "  + object.getObjectMetadata().getContentType());
+        System.out.println("Replay Starts: "  + object.getObjectMetadata().getContentType());
         displayTextInputStream(object.getObjectContent());
 	}
 	public void listObjects()
@@ -102,24 +103,30 @@ public class ReplayS3 {
       System.out.println("Deleting bucket " + bucketName + "\n");
       s3.deleteBucket(bucketName);
 	}
-    private static File createSampleFile() throws IOException {
+
+    public File createFile(ArrayList<String> s) throws IOException {
         File file = File.createTempFile("aws-java-sdk-", ".txt");
         file.deleteOnExit();
 
         Writer writer = new OutputStreamWriter(new FileOutputStream(file));
-        writer.write("Test\n");
+        for (int i = 0; i < s.size(); i++)
+        {
+            writer.write(s.get(i).toString());
+
+        }
 
         writer.close();
 
         return file;
     }
-    private static void displayTextInputStream(InputStream input) throws IOException {
+    public void displayTextInputStream(InputStream input) throws IOException {
+    	int i = 1;
         BufferedReader reader = new BufferedReader(new InputStreamReader(input));
         while (true) {
             String line = reader.readLine();
             if (line == null) break;
 
-            System.out.println("    " + line);
+            System.out.println(i++ + " : "+ line);
         }
         System.out.println();
     }
