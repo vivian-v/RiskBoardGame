@@ -1,5 +1,3 @@
-package demo3;
-
 import java.io.ByteArrayInputStream;
 import javax.swing.undo.UndoManager;
 import java.io.ByteArrayOutputStream;
