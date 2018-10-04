@@ -1,3 +1,5 @@
+
+
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -5,9 +7,15 @@ public class Deck {
 	private Card card;
 	private ArrayList<Card> deck;
 	
+	public Deck()
+	{
+		deck = new ArrayList<Card>();
+	}
+	public Deck(Deck d) {
+		// TODO Auto-generated constructor stub
+	}
 	public void putCards(ArrayList<Card> card){
 		deck = card;
-		shuffle();
 	}
 	public void shuffle(){
 		Collections.shuffle(deck);
@@ -21,4 +29,5 @@ public class Deck {
 		
 		return card;
 	}
+	
 }

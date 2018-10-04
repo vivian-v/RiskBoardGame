@@ -1,57 +1,58 @@
+
 import java.util.ArrayList;
 
 public class Country {
-	private int numOfArmy;
-
 	private String OwnerName;
-	private String ContinentName;
 	private String CountryName;
-
+	private int numOfArmy;
+	private String continentName;
 	private ArrayList<String> ConnectedCountry;
-		
+
 	public Country(String x){
 		this.OwnerName = "Unknown";
-		this.ContinentName = null;
+		this.continentName = "Unknown";
 		this.CountryName = x;
 		this.numOfArmy = 0;
 		this.ConnectedCountry = new ArrayList<String>();
 	}
 	public void setCountryInfo(String[] n){
-		this.ContinentName = n[0];
+		this.continentName = n[0];
 		for (int i = 1; i < n.length; i++)
 			this.ConnectedCountry.add(n[i]);
 	}
-	public void loseNumArmy(int n)
+	public ArrayList<String> getAdjacency()
 	{
-		this.numOfArmy -= n;
-	}
-	public int getNumArmy(){
-		return this.numOfArmy;
-	}
-	public String getOwnerName(){
-		return this.OwnerName;
-	}
-	public String getContinentName(){
-		return this.ContinentName;
-	}
-	public String getCountryName(){
-		return this.CountryName;
-	}
-	public boolean isConnected(String nearCountry){
-		if (this.ConnectedCountry.contains(nearCountry))
-			return true;
-		else
-			return false;	
-	}
-	public ArrayList<String> getAdjacency(){
 		return this.ConnectedCountry;
 	}
-	public void setOwerName(String name)
-	{
-		this.OwnerName = name;
+
+	public String getOwnerName() { 
+		return this.OwnerName; 
 	}
-	public void AddNumOfArmy(int num)
-	{
-		this.numOfArmy += num;
+	
+	public String getCountryName() { 
+		return this.CountryName; 
 	}
+	
+	public int getNumOfArmy() { 
+		return this.numOfArmy; 
+	}
+	
+	public String getContinentName()
+	{
+		return this.continentName;
+	}
+
+	public void setOwnerName(String n) { 
+		this.OwnerName = n; 
+	}
+	
+	public void setCountryName(String n) {
+		this.CountryName = n;
+	}
+	
+	public void setNumOfArmy(int n) {
+		this.numOfArmy += n;
+	}
+	
+
 }
