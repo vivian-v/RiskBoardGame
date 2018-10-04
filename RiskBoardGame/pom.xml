@@ -3,7 +3,6 @@
   <groupId>com.meow</groupId>
   <artifactId>Demo</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  
   <build>
      <plugins>
          <plugin>
@@ -17,13 +16,42 @@
                 </formats>
                 <check />
             </configuration>
-    <dependencies>
+        </plugin>
+        <plugin>
+            <artifactId>maven-clean-plugin</artifactId>
+            <version>3.1.0</version>
+            <executions>
+                <execution>
+                    <id>clean-allure-results</id>
+                    <phase>clean</phase>
+                    <goals>
+                        <goal>clean</goal>
+                    </goals>
+                    <configuration>
+                        <filesets>
+                            <fileset>
+                                <directory>path/to/allure-results</directory>
+                            </fileset>
+                        </filesets>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+     </plugins> 
+  </build>
+  <dependencies>
 
      <dependency>
           <groupId>junit</groupId>
           <artifactId>junit</artifactId>
           <version>4.12</version>
+          <scope>test</scope>
+          
      </dependency>
-
+<dependency>
+    <groupId>com.amazonaws</groupId>
+    <artifactId>aws-java-sdk</artifactId>
+    <version>1.11.163</version>
+</dependency>
 </dependencies>
 </project>
