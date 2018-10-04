@@ -26,6 +26,12 @@ public class TestDice extends TestCase {
     	assertTrue(test.rollForOne() > 0 && test.rollForOne() < 7);
     }
 
-	
+	@Test
+	public void testMaxNumDice()
+	{
+		assertEquals(3, test.maxNumDice("Attacker", 4));
+		assertEquals(2, test.maxNumDice("Defender", 4));
+
+	}
 
 }
