@@ -1,3 +1,4 @@
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -153,34 +154,36 @@ public class Setup {
 	 }
 	public int setupNumOfPlayers()
 	{
-		/*Scanner keyboard = new Scanner(System.in);
-		int numPlayers = 0;
-		do{		
-			System.out.println("How many players are playing? 2~6 : ");
-	    	try	{
-	    		numPlayers = keyboard.nextInt();
-	    	}
-		    catch (Exception e){
-		    	System.out.println("Invalid input. Please enter a whole number between 2 - 6");
-		    	keyboard.next(); // Discard bad input
-		    }
-		}
-		while(numPlayers > 6 || numPlayers < 2);*/
+		//Scanner keyboard = new Scanner(System.in);
+		int numPlayers = 4;
+//		do{		
+//			System.out.println("How many players are playing? 2~6 : ");
+//	    	try	{
+//	    		numPlayers = keyboard.nextInt();
+//	    	}
+//		    catch (Exception e){
+//		    	System.out.println("Invalid input. Please enter a whole number between 2 - 6");
+//		    	keyboard.next(); // Discard bad input
+//		    }
+//		}
+//		while(numPlayers > 6 || numPlayers < 2);
 		
-		return 4;
+		return numPlayers;
 		//this.players = new Player[numPlayers];
 	}
 	public ArrayList<Player> setupPlayer(int numPlayers)
 	{
+		
 		ArrayList<Player> players = new ArrayList<Player>();
-		//Scanner keyboard = new Scanner(System.in);
+		Scanner keyboard = new Scanner(System.in);
 		String userInput;
 		int NumTroops = 40 - ((numPlayers - 2) * 5);
+		String[] str  = {"Chang", "Vincent"};
 		for (int i = 0; i < numPlayers; i++) 
 		{
 			System.out.print("Enter name for Player " + (i+1) + ": ");
 			//userInput = keyboard.nextLine();
-			userInput = "Chang";
+			userInput = str[i];
 			Player newPlayer = new Player(userInput, NumTroops);
 			players.add(newPlayer);
 		}
