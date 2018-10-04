@@ -1,4 +1,3 @@
-package demo3;
 
 public class Card {
 	private String detail;
