@@ -1,4 +1,5 @@
 package demo3;
+
 import java.io.ByteArrayInputStream;
 import javax.swing.undo.UndoManager;
 import java.io.ByteArrayOutputStream;
@@ -22,9 +23,10 @@ public class Board {
 	Deck deck = new Deck();
 	UndoSystem actionController = new UndoSystem();
 	History history;
-	//ReplayS3 replay = new ReplayS3();
+	ReplayS3 replay = new ReplayS3();
 	ArrayList<String> s = new ArrayList<String>();
 	File file;
+	//ReplaySystem replay = new ReplaySystem();
 	
 	public Board(HashMap<String, Country> m, ArrayList<Player> p) throws IOException
 	{
@@ -34,7 +36,7 @@ public class Board {
 		Players = p;
 		//replay.createBucket();
 		//replay.listBuckets();
-		
+		//replay.requestReplay();
 		
 		actionStatus = armyPlacement(playerTurn);
 		history = new History(actionStatus, Players, Map, playerTurn, deck);
@@ -79,9 +81,9 @@ public class Board {
 		actionController.addActionRecord(history);
 
 		
-		//file = replay.createFile(s);
-		//replay.putObject(file);
-		//replay.downloadObject();
+		file = replay.createFile(s);
+		replay.putObject(file);
+		replay.downloadObject();
 		
 		this.actionController.undo();
 //		this.actionController.undo();
