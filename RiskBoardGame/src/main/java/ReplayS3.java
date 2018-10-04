@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.UUID;
 
 import com.amazonaws.AmazonClientException;
@@ -34,27 +35,17 @@ public class ReplayS3 {
 	String key;
 	AWSCredentials credentials;
 	AmazonS3 s3;
+	Date currentDate;
 	public ReplayS3()
 	{
-		credentials = null;
-		
-		try {
-            credentials = new ProfileCredentialsProvider("default").getCredentials();
-        } catch (Exception e) {
-            throw new AmazonClientException(
-                    "Cannot load the credentials from the credential profiles file. " +
-                    "Please make sure that your credentials file is at the correct " +
-                    "location (C:\\Users\\ChangJin\\.aws\\credentials), and is in valid format.",
-                    e);
-        }
+		currentDate = new Date();
 
         s3 = AmazonS3ClientBuilder.standard()
-            .withCredentials(new AWSStaticCredentialsProvider(credentials))
             .withRegion("us-west-2")
             .build();
 
-        bucketName = "riskdemo3" + UUID.randomUUID();
-        key = "MyObjectKey";
+        bucketName = "riskdemo3replaynew";
+        key = currentDate.toString();
 	}
 	public String getBucketName()
 	{
