@@ -1,1 +1,3 @@
-[![Build Status](https://travis-ci.org/changjin86/aaa.svg?branch=master)](https://travis-ci.org/changjin86/aaa)
+# RiskBoardGame
+
+[![Build Status](https://travis-ci.com/vivian-v/RiskBoardGame.svg?branch=master)](https://travis-ci.com/vivian-v/RiskBoardGame)
