@@ -12,11 +12,6 @@ public class TestSetup extends TestCase {
 
 
     @Test
-    public void testLoadDeck() {
-    	Deck testDeck = test.LoadDeck();
-    	assertEquals("Alaska", testDeck.draw().getDetail());
-    }
-    @Test
     public void testLoadMap() {
     	HashMap<String, Country> Map = test.LoadMap();
     	assertEquals(42, Map.size());
