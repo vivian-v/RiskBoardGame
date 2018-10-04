@@ -5,4 +5,9 @@ jdk:
   
 install: true
 
-script: mvn -f RiskBoardGame/pom.xml test
+script: 
+- mvn -f demo3/pom.xml test
+- "mvn -f demo3/pom.xml cobertura:cobertura"
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
