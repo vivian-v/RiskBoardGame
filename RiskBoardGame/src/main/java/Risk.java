@@ -1,11 +1,10 @@
-package demo3;
-
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Risk {
 
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 
 		Setup setup = new Setup();
 
@@ -33,7 +32,10 @@ public class Risk {
 //		{
 //			System.out.println(p.get(i).getPlayerName());
 //		}
+		
 	}
+
+
 
 	
 
