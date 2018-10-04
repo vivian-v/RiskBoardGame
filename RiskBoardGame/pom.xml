@@ -4,6 +4,19 @@
   <artifactId>Demo</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   
+  <build>
+     <plugins>
+         <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>cobertura-maven-plugin</artifactId>
+            <version>2.7</version>
+            <configuration>
+                <formats>
+                    <format>html</format>
+                    <format>xml</format>
+                </formats>
+                <check />
+            </configuration>
     <dependencies>
 
      <dependency>
