@@ -4,10 +4,11 @@ import java.util.Stack;
 public class UndoSystem {
 	Stack<History> stack = new Stack();
 	
-	public void undo()
+	public History undo()
 	{
 		History oldHistory = stack.pop();
-		System.out.println("Player " + oldHistory.getPrevPlayers().get(oldHistory.getPrevPlayerIndex()).getPlayerName() + " undo " + oldHistory.getActionStatus() + " completed");
+		//("Player " + oldHistory.getPrevPlayers().get(oldHistory.getPrevPlayerIndex()).getPlayerName() + " undo " + oldHistory.getActionStatus() + "\n");
+		return oldHistory;
 		
 	}
 
