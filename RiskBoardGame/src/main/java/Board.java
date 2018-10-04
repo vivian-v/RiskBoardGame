@@ -1,3 +1,4 @@
+package demo3;
 
 import java.io.ByteArrayInputStream;
 import javax.swing.undo.UndoManager;
@@ -22,7 +23,7 @@ public class Board {
 	Deck deck = new Deck();
 	UndoSystem actionController = new UndoSystem();
 	History history;
-	ReplayS3 replay = new ReplayS3();
+	//ReplayS3 replay = new ReplayS3();
 	ArrayList<String> s = new ArrayList<String>();
 	File file;
 	
@@ -102,6 +103,7 @@ public class Board {
 //		System.out.println(Map.get("Alberta").getNumOfArmy());
 	}
 
+
 	public String attack (int attackerIndex, int defenderIndex)
 	{
 		s.add(Players.get(attackerIndex).getPlayerName() + " starts to attack " + Players.get(defenderIndex).getPlayerName()+ "\n");
@@ -157,8 +159,6 @@ public class Board {
 			s.add("# Attacker might not have enough army to attack\n");
 			s.add("# Attacker can't attack his country\n");
 			s.add("# attacker's country and defender's country is not connected\n");
-
-
 		}
 
 		
@@ -174,16 +174,19 @@ public class Board {
 		
 		return true;	
 	}
-	public void transferOwnership(String attackerCountry, String defenderCountry)
+	public boolean transferOwnership(String attackerCountry, String defenderCountry)
 	{
+		if (attackerCountry == defenderCountry)
+			return false;
 		Map.get(defenderCountry).setOwnerName((Map.get(attackerCountry).getOwnerName()));
 		Map.get(defenderCountry).setNumOfArmy(1);
 		Map.get(attackerCountry).setNumOfArmy(-1);
-
+		return true;
 	}
-	public void killPlayer(int playerIndex)
+	public int killPlayer(int playerIndex)
 	{
 		Players.remove(playerIndex);
+		return playerIndex;
 	}
 	public String armyPlacement(int playerIndex)
 	{
