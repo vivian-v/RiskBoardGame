@@ -22,26 +22,7 @@
         <artifactId>maven-surefire-report-plugin</artifactId>
         <version>2.22.0</version>
       </plugin>
-        <plugin>
-            <artifactId>maven-clean-plugin</artifactId>
-            <version>3.1.0</version>
-            <executions>
-                <execution>
-                    <id>clean-allure-results</id>
-                    <phase>clean</phase>
-                    <goals>
-                        <goal>clean</goal>
-                    </goals>
-                    <configuration>
-                        <filesets>
-                            <fileset>
-                                <directory>path/to/allure-results</directory>
-                            </fileset>
-                        </filesets>
-                    </configuration>
-                </execution>
-            </executions>
-        </plugin>
+        
      </plugins> 
   </build>
   <dependencies>
