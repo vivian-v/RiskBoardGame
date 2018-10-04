@@ -1,4 +1,3 @@
-
 import org.junit.Test;
 import junit.framework.TestCase;
 
@@ -36,11 +35,9 @@ public class TestPlayer extends TestCase {
     	assertEquals("Vincent", test.getPlayerName());
     }
 	@Test
-	@Test
 	public void testSetNumOfTroops()
 	{
 		test.setNumOfTroops(20);
-		//test start with 40 troops, functino +20 
 		assertEquals(60, test.getNumOfTroops());
 	}
 	@Test
