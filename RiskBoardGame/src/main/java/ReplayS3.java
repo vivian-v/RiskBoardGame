@@ -55,53 +55,71 @@ public class ReplayS3 {
         bucketName = "riskdemo3" + UUID.randomUUID();
         key = "MyObjectKey";
 	}
-	
-	public void createBucket()
+	public String getBucketName()
+	{
+		return this.bucketName;
+	}
+	public String getKey()
+	{
+		return this.key;
+	}
+	public String createBucket()
 	{
 		System.out.println("Creating bucket " + bucketName + "\n");
         s3.createBucket(bucketName);
+        return bucketName;
 	}
-	public void listBuckets()
+	public int listBuckets()
 	{
+		int index = 1;
 		 System.out.println("Listing buckets");
          for (Bucket bucket : s3.listBuckets()) {
-             System.out.println(" - " + bucket.getName());
+             System.out.println(index++ + " : " + bucket.getName());
          }
          System.out.println();
+         return index;
 	}
 	public void putObject(File file) throws IOException
 	{
 		System.out.println("Uploading a new object to S3 from a file\n");
         s3.putObject(new PutObjectRequest(bucketName, key, file));
 	}
-	public void downloadObject() throws IOException
+	public boolean downloadObject() throws IOException
 	{
 		System.out.println("Downloading replay");
         S3Object object = s3.getObject(new GetObjectRequest(bucketName, key));
+
         System.out.println("Replay Starts: "  + object.getObjectMetadata().getContentType());
         displayTextInputStream(object.getObjectContent());
+     
+        return true;
 	}
-	public void listObjects()
+	public int listObjects()
 	{
+		int index = 1;
 		 System.out.println("Listing objects");
          ObjectListing objectListing = s3.listObjects(new ListObjectsRequest()
                  .withBucketName(bucketName)
                  .withPrefix("My"));
          for (S3ObjectSummary objectSummary : objectListing.getObjectSummaries()) {
-             System.out.println(" - " + objectSummary.getKey() + "  " +
+             System.out.println(index++ + " : " + objectSummary.getKey() + "  " +
                                 "(size = " + objectSummary.getSize() + ")");
          }
          System.out.println();
+         return index;
 	}
 	public void deleteObject()
 	{
+		
       System.out.println("Deleting an object\n");
       s3.deleteObject(bucketName, key);
+      
 	}
-	public void deleteBucket()
+	public String deleteBucket()
 	{
       System.out.println("Deleting bucket " + bucketName + "\n");
       s3.deleteBucket(bucketName);
+      return bucketName;
 	}
 
     public File createFile(ArrayList<String> s) throws IOException {
