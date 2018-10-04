@@ -1,3 +1,4 @@
+
 import java.io.ByteArrayInputStream;
 import javax.swing.undo.UndoManager;
 import java.io.ByteArrayOutputStream;
@@ -31,64 +32,58 @@ public class Board {
 		String actionStatus;
 		Map = m;
 		Players = p;
-		replay.createBucket();
-		replay.listBuckets();
+		//replay.createBucket();
+		//replay.listBuckets();
 		
 		
 		actionStatus = armyPlacement(playerTurn);
 		history = new History(actionStatus, Players, Map, playerTurn, deck);
 		actionController.addActionRecord(history);
-		s.add(Players.get(playerTurn).getPlayerName() + " " + actionStatus + "\n");
 		
 		
 		actionStatus = reinforce(playerTurn);
 		history = new History(actionStatus, Players, Map, playerTurn, deck);
 		actionController.addActionRecord(history);
-		s.add(Players.get(playerTurn).getPlayerName() + " " + actionStatus + "\n");
 
 		
 		actionStatus = attack(playerTurn,1);
 		history = new History(actionStatus, Players, Map, playerTurn, deck);
 		actionController.addActionRecord(history);
-		s.add(Players.get(playerTurn).getPlayerName() + " " + actionStatus + "\n");
+		//s.add(this.actionController.undo());
 
 		
 		actionStatus = fortify(playerTurn);
 		history = new History(actionStatus, Players, Map, playerTurn, deck);
 		actionController.addActionRecord(history);
-		s.add(Players.get(playerTurn).getPlayerName() + " " + actionStatus + "\n");
 
 		
 		playerTurn++;
 		actionStatus = armyPlacement(1);
 		history = new History(actionStatus, Players, Map, playerTurn, deck);
 		actionController.addActionRecord(history);
-		s.add(Players.get(playerTurn).getPlayerName() + " " + actionStatus + "\n");
 
 		actionStatus = reinforce(1);
 		history = new History(actionStatus, Players, Map, playerTurn, deck);
 		actionController.addActionRecord(history);
-		s.add(Players.get(playerTurn).getPlayerName() + " " + actionStatus + "\n");
 
-		
-		actionStatus = attack(0,1);
+		//s.add(this.actionController.undo());
+
+		actionStatus = attack(1,0);
 		history = new History(actionStatus, Players, Map, playerTurn, deck);
 		actionController.addActionRecord(history);
-		s.add(Players.get(playerTurn).getPlayerName() + " " + actionStatus + "\n");
 
 		
 		
 		actionStatus = fortify(playerTurn);
 		history = new History(actionStatus, Players, Map, playerTurn, deck);
 		actionController.addActionRecord(history);
-		s.add(Players.get(playerTurn).getPlayerName() + " " + actionStatus + "\n");
 
 		
-		file = replay.createFile(s);
-		replay.putObject(file);
-		replay.downloadObject();
+		//file = replay.createFile(s);
+		//replay.putObject(file);
+		//replay.downloadObject();
 		
-//		this.actionController.undo();
+		this.actionController.undo();
 //		this.actionController.undo();
 //		this.actionController.undo();
 //		this.actionController.undo();
@@ -109,6 +104,8 @@ public class Board {
 
 	public String attack (int attackerIndex, int defenderIndex)
 	{
+		s.add(Players.get(attackerIndex).getPlayerName() + " starts to attack " + Players.get(defenderIndex).getPlayerName()+ "\n");
+
 		int[] attackerRolls;
 		int[] defenderRolls;
 		int numAttackerLose = 0;
@@ -125,6 +122,7 @@ public class Board {
 			if (attackerRolls[attackerRolls.length - 1] > defenderRolls[defenderRolls.length - 1])
 			{
 				numDefenderLose++;
+				
 			} else if (attackerRolls[attackerRolls.length - 1] <= defenderRolls[defenderRolls.length - 1])
 			{
 				numAttackerLose++;
@@ -141,6 +139,9 @@ public class Board {
 				}
 			}
 			
+			s.add(Players.get(attackerIndex).getPlayerName() + " lost " + numAttackerLose + "\n");
+			s.add(Players.get(defenderIndex).getPlayerName() + " lost " + numDefenderLose + "\n");
+
 			Map.get(attackerCountry.getCountryName()).setNumOfArmy(numAttackerLose * -1);
 			Map.get(defenderCountry.getCountryName()).setNumOfArmy(numDefenderLose * -1);
 			
@@ -150,6 +151,14 @@ public class Board {
 				killPlayer(defenderIndex);
 			}
 	
+		} else
+		{
+			s.add(Players.get(attackerIndex).getPlayerName() + " can't attack due to following reasons\n");
+			s.add("# Attacker might not have enough army to attack\n");
+			s.add("# Attacker can't attack his country\n");
+			s.add("# attacker's country and defender's country is not connected\n");
+
+
 		}
 
 		
@@ -178,7 +187,8 @@ public class Board {
 	}
 	public String armyPlacement(int playerIndex)
 	{
-		
+		s.add(Players.get(playerIndex).getPlayerName() + " starts to army placement\n");
+
 		int index = 0;
 		int num = 4;
 		String pickedCountry = "Alberta";
@@ -187,6 +197,8 @@ public class Board {
 		Map.get(pickedCountry).setNumOfArmy(num);
 		Players.get(playerIndex).setNumOfTroops(num * -1);
 		Players.get(playerIndex).takeCountry(Map.get(pickedCountry));
+		s.add(Players.get(playerIndex).getPlayerName() + " take " + pickedCountry+ " with " + num + " army" + "\n");
+
 		
 		//index++;
 		
@@ -195,13 +207,15 @@ public class Board {
 		Map.get(pickedCountry).setNumOfArmy(num);
 		Players.get(playerIndex).setNumOfTroops(num * -1);
 		Players.get(playerIndex).takeCountry(Map.get(pickedCountry));
-		
+		s.add(Players.get(playerIndex).getPlayerName() + " take " + pickedCountry+ " with " + num + " army" + "\n");
+
 		pickedCountry = "Central America";
 		Map.get(pickedCountry).setOwnerName(Players.get(index).getPlayerName());
 		Map.get(pickedCountry).setNumOfArmy(num);
 		Players.get(playerIndex).setNumOfTroops(num * -1);
 		Players.get(playerIndex).takeCountry(Map.get(pickedCountry));
-		
+		s.add(Players.get(playerIndex).getPlayerName() + " take " + pickedCountry+ " with " + num + " army" + "\n");
+
 		return "army placement action";
 	}
 
@@ -218,7 +232,8 @@ public class Board {
 
 	public String reinforce(int playerIndex)
 	{
-		
+		s.add(Players.get(playerIndex).getPlayerName() + " starts to reinforce\n");
+
 		int totalTroops = 0;
 		int troopsByTerritory = 0;
 		int troopsByRegion = 0;
@@ -239,6 +254,10 @@ public class Board {
 			}
 		}
 		
+		totalTroops = troopsByTerritory + troopsByRegion;
+		Players.get(playerIndex).setNumOfTroops(totalTroops);
+		s.add(Players.get(playerIndex).getPlayerName() + " earn " + totalTroops + " from reinforcement\n");
+
 		//System.out.println(troopsByTerritory + troopsByRegion);
 		
 		return "reinforce action";
@@ -246,6 +265,8 @@ public class Board {
 
 	public String fortify(int playerIndex)
 	{
+		s.add(Players.get(playerIndex).getPlayerName() + " starts to fortify his/her country\n");
+
 		int numTrasferArmy = 2;
 		Country fromCountry = fromCountry("Alberta");
 		Country toCountry = toCountry("Alaska");
@@ -255,6 +276,9 @@ public class Board {
 			Map.get(fromCountry.getCountryName()).setNumOfArmy(numTrasferArmy * -1);
 			Map.get(toCountry.getCountryName()).setNumOfArmy(numTrasferArmy);
 		}
+		
+		s.add(Players.get(playerIndex).getPlayerName() + " fortify from" + fromCountry.getCountryName()+ " to " + toCountry.getCountryName() + "\n");
+
 		return "fortify action";
 	}
 	public boolean isFortifiable(Country c1, Country c2)
