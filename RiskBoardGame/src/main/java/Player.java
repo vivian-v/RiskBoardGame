@@ -1,4 +1,5 @@
 package demo3;
+
 import java.util.ArrayList;
 
 public class Player  {
@@ -11,13 +12,18 @@ public class Player  {
 
 	private ArrayList<Country> ownedCountries;
 	private ArrayList<Card> cards;
-	
+	private int tradeSetIndex;
 	public Player(String s, int n)	{
 		this.playerName = s;
 		this.numOfTroops = n;
 		this.ownedCountries = new ArrayList<Country>();
 		this.cards = new ArrayList<Card>();
 		this.countriesOwnedByRegions = new int[6];
+		this.tradeSetIndex = 1;
+	}
+	public int getTradeSetIndex()
+	{
+		return this.tradeSetIndex;
 	}
 	public int getNumOfTroops()
 	{
@@ -59,7 +65,11 @@ public class Player  {
 	public void addCard(Card c) {
 		this.cards.add(c);
 	}
-	
+	public void setCards(ArrayList<Card> c)
+	{
+		this.tradeSetIndex++;
+		this.cards = c;
+	}
 	public Card drawCard()
 	{
 		return this.cards.remove(0);
@@ -83,4 +93,3 @@ public class Player  {
 	}
 
 }
-
