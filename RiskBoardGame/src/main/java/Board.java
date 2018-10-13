@@ -38,54 +38,33 @@ public class Board {
 		//replay.listBuckets();
 		//replay.requestReplay();
 		
-		actionStatus = armyPlacement(playerTurn);
-		history = new History(actionStatus, Players, Map, playerTurn, deck);
-		actionController.addActionRecord(history);
-		
-		
-		actionStatus = reinforce(playerTurn);
-		history = new History(actionStatus, Players, Map, playerTurn, deck);
-		actionController.addActionRecord(history);
+		ArrayList<Card> cd = new ArrayList<Card>();
+		Card c1 = new Card("ddd", "solider");
+		Card c2 = new Card("ddd", "horse");
 
-		
-		actionStatus = attack(playerTurn,1);
-		history = new History(actionStatus, Players, Map, playerTurn, deck);
-		actionController.addActionRecord(history);
-		//s.add(this.actionController.undo());
-
-		
-		actionStatus = fortify(playerTurn);
-		history = new History(actionStatus, Players, Map, playerTurn, deck);
-		actionController.addActionRecord(history);
-
-		
-		playerTurn++;
-		actionStatus = armyPlacement(1);
-		history = new History(actionStatus, Players, Map, playerTurn, deck);
-		actionController.addActionRecord(history);
-
-		actionStatus = reinforce(1);
-		history = new History(actionStatus, Players, Map, playerTurn, deck);
-		actionController.addActionRecord(history);
-
-		//s.add(this.actionController.undo());
-
-		actionStatus = attack(1,0);
-		history = new History(actionStatus, Players, Map, playerTurn, deck);
-		actionController.addActionRecord(history);
-
+		Card c3 = new Card("ddd", "cannon");
+		Card c4 = new Card("ddd", "Chang");
+		Players.get(0).addCard(c1);
+		Players.get(0).addCard(c2);
+		Players.get(0).addCard(c3);
+		Players.get(0).addCard(c4);
+		System.out.println(tradeInCard(0));//tradeInCard(0);
+		//checkTypeInCards(cd);
 		
 		
-		actionStatus = fortify(playerTurn);
-		history = new History(actionStatus, Players, Map, playerTurn, deck);
-		actionController.addActionRecord(history);
-
 		
-		file = replay.createFile(s);
-		replay.putObject(file);
-		replay.downloadObject();
 		
-		this.actionController.undo();
+//		actionStatus = armyPlacement(playerTurn);
+//		history = new History(actionStatus, Players, Map, playerTurn, deck);
+//		actionController.addActionRecord(history);
+//		
+//
+//		
+//		file = replay.createFile(s);
+//		replay.putObject(file);
+//		replay.downloadObject();
+//		
+//		this.actionController.undo();
 //		this.actionController.undo();
 //		this.actionController.undo();
 //		this.actionController.undo();
@@ -259,6 +238,8 @@ public class Board {
 		}
 		
 		totalTroops = troopsByTerritory + troopsByRegion;
+		
+		
 		Players.get(playerIndex).setNumOfTroops(totalTroops);
 		s.add(Players.get(playerIndex).getPlayerName() + " earn " + totalTroops + " from reinforcement\n");
 
@@ -266,7 +247,119 @@ public class Board {
 		
 		return "reinforce action";
 	}
+	public int tradeInCard(int playerIndex)
+	{
+		int idx = 0;
+		int[] bonusNumber = {0,4,6,8,10,12,15,20,25};
 
+		ArrayList<Card> cardHeld = Players.get(playerIndex).getAllCards();
+		String[] pickedCards = new String[3];
+		String[] pickedCountry = new String[3];
+		int[] pickedIndex = new int[3];
+		
+		pickedCards[0] = cardHeld.get(0).getType();
+		pickedCards[1] =  cardHeld.get(1).getType();
+		pickedCards[2] =  cardHeld.get(2).getType();
+		
+		pickedCountry[0] = cardHeld.get(0).getDetail();
+		pickedCountry[1] = cardHeld.get(1).getDetail();
+		pickedCountry[2] = cardHeld.get(2).getDetail();
+
+		
+		pickedIndex[0] = 0;
+		pickedIndex[1] = 1;
+		pickedIndex[2] = 2;
+
+		if (cardHeld.size() > 2)
+		{
+			if (isTradable(pickedCards))
+			{
+				int bonusByCountry = checkCountryInCardsOwned(playerIndex,pickedCountry);
+				idx = Players.get(playerIndex).getTradeSetIndex();
+				Players.get(playerIndex).setCards(afterTrade(cardHeld, pickedIndex));
+
+				if (idx < 9)
+					return bonusNumber[idx] + bonusByCountry;
+				else 
+					return 25 + ((idx - 8) * 5) + bonusByCountry;	
+			}
+		}
+		else
+		{
+			return 0;	
+		}
+		
+
+		return 0;
+	}
+	public ArrayList<Card> afterTrade(ArrayList<Card> c, int[] pickedIndex)
+	{
+		ArrayList<Card> tempCardHeld = new ArrayList<Card>();
+		
+		for (int i = 0; i < c.size(); i++)
+		{
+			if (i != pickedIndex[0] && i != pickedIndex[1] && i != pickedIndex[2])
+			tempCardHeld.add(new Card(c.get(i).getDetail(), c.get(i).getType()));
+		}
+					
+		return tempCardHeld; 
+	}
+
+
+	public int checkCountryInCardsOwned(int playerIndex,String[] pickedCountry)
+	{
+		
+		ArrayList<String> countryLists = new ArrayList<String>();
+		ArrayList<Country> OwnedCountry = Players.get(playerIndex).getOwnedCountries();
+		
+		for (int i = 0; i < OwnedCountry.size(); i++)
+		{
+			countryLists.add(OwnedCountry.get(i).getCountryName());
+		}
+		
+		if (countryLists.contains(pickedCountry[0]) || countryLists.contains(pickedCountry[1]) || countryLists.contains(pickedCountry[2]))
+			return 2;
+		else 
+			return 0;
+		
+	}
+
+	public boolean isTradable(String[] c)
+	{
+		ArrayList<Integer> numLists = new ArrayList<Integer>();
+		int total = 0;
+		
+		numLists.add(3);
+		numLists.add(30);
+		numLists.add(300);
+		numLists.add(111);
+		numLists.add(1011);
+		numLists.add(1101);
+		numLists.add(1110);
+		numLists.add(2001);
+		numLists.add(2010);
+		numLists.add(2100);
+
+		for (int i = 0; i < c.length; i++)
+		{
+			if (c[i].equals("solider"))
+				total += 1;
+			else if (c[i].equals("horse"))
+				total += 10;
+			else if (c[i].equals("cannon"))
+				total += 100;
+			else if (c[i].equals("wild"))
+				total += 1000;
+		}
+		
+		if (numLists.contains(total))
+		{
+			return true;
+		}
+		else 
+			return false;
+
+	}
 	public String fortify(int playerIndex)
 	{
 		s.add(Players.get(playerIndex).getPlayerName() + " starts to fortify his/her country\n");
