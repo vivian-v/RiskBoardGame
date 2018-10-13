@@ -1,5 +1,7 @@
 package demo3;
 
+
+
 import org.junit.Test;
 import junit.framework.TestCase;
 
@@ -21,7 +23,7 @@ public class TestUndoSystem extends TestCase {
 	Country c2 = new Country("Japan");
 	Deck d1 = new Deck();
 	int playerTurn = 0;
-	
+	int testTradeSetIndex = 0;
 	HashMap<String, Country> m1 = new HashMap<String, Country>();
 	ArrayList<Player> testPlist = new ArrayList<Player>();
 	
@@ -43,11 +45,11 @@ public class TestUndoSystem extends TestCase {
     	actionController = new UndoSystem();
     	
     	String actionStatus1 = "attack"; 
-		test1 = new History(actionStatus1, testPlist, m1, playerTurn, d1);
+		test1 = new History(actionStatus1, testPlist, m1, playerTurn, d1, testTradeSetIndex);
 		actionController.addActionRecord(test1);
     	
 	  	String actionStatus2 = "reinforce";
-		test1 = new History(actionStatus2, testPlist, m1, playerTurn, d1);
+		test1 = new History(actionStatus2, testPlist, m1, playerTurn, d1, testTradeSetIndex);
 		actionController.addActionRecord(test1);
 		
 		
