@@ -1,5 +1,7 @@
 package demo3;
 
+
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -15,13 +17,13 @@ public class TestHistory extends TestCase {
 	int testIndex = 0;
 	Deck testDeck = new Deck();
 	String actionStatus = "attack action";
-	
+	int testTradeSetIndex = 0;
 	@Test
 	public void testgetActionStatus()
 	{
 		Player p1 = new Player("Chang", 1);
 		testPlayers.add(p1);
-		History test = new History(actionStatus, testPlayers, testMap, testIndex, testDeck);
+		History test = new History(actionStatus, testPlayers, testMap, testIndex, testDeck, testTradeSetIndex);
 		assertEquals("attack action", test.getActionStatus());
 	}
 
