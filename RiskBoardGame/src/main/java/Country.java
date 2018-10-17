@@ -1,7 +1,8 @@
-package demo3;
+package riskboardgame;
+
 import java.util.ArrayList;
 
-public class Country {
+public class Country   {
 	private String OwnerName;
 	private String CountryName;
 	private int numOfArmy;
@@ -50,9 +51,12 @@ public class Country {
 		this.CountryName = n;
 	}
 	
-	public void setNumOfArmy(int n) {
+	public void addNumOfArmy(int n) {
 		this.numOfArmy += n;
 	}
-	
+	public void loseNumOfArmy(int n)
+	{
+		this.numOfArmy -= n;
+	}
 
 }
