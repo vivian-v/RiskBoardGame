@@ -1,11 +1,11 @@
 # RiskBoardGame
 
--Requirements for v0.3:\
--Users can undo their actions\
--Your Program uses Amazon S3 to replay games (You get some Amazon credits through your GitHub student pack)\
--Test cases to cover at least 50% of the code. \
--Show test coverage on the repository page:\
--https://blog.frankel.ch/travis-ci-tutorial-for-java-projects/\
+1. (Vivian Le) Notify players if their territories are under attack. (Remember the Observer Pattern)\
+2. (Vincent Poon) Players can purchase in-game credit. They can use the credit to buy cards, buy undo actions, or transfer the credits to another player.\
+3. (Chang Lee) Post the number of territories conquered by each player on Twitter after each turn and at the end of the game. (https://developer.twitter.com/en/docs/developer-utilities/twitter-libraries.html or http://twitter4j.org/en/index.html )\
+4. (Duong Nguyen) Modify pom.xml to generate JavaDocs and class diagrams. Reference: https://maven.apache.org/plugins/maven-javadoc-plugin/examples/alternate-doclet.html\
+5. Tag the repo as “v0.4”
+
 
 
 [![Build Status](https://travis-ci.com/vivian-v/RiskBoardGame.svg?branch=master)](https://travis-ci.com/vivian-v/RiskBoardGame)
