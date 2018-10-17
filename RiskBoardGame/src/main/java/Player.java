@@ -3,6 +3,7 @@ package riskboardgame;
 import java.util.ArrayList;
 
 
+
 public class Player implements Observer, Transaction {
 	private ArrayList<Observer> warObservers = new ArrayList<Observer>();
 	
