@@ -32,6 +32,7 @@ public class Board {
 	ReplayS3 replay = new ReplayS3();
 	ArrayList<String> s = new ArrayList<String>();
 	File file;
+	WarObserver warObserver = new WarObserver();
 	boolean checkGameEnd = false;
 	String[] playerNameList;
 	int[] playerConquerList;
@@ -56,7 +57,18 @@ public class Board {
 ////		
 //		
 		
+		warObserver.addObserver(Players.get(0));
+		warObserver.addObserver(Players.get(1));
+		warObserver.notifyWarObservers();
+		
+		Transaction player = new Proxy(20);
+	
+		System.out.println(player.getCredit());
 
+		System.out.println(player.buyCards());
+		System.out.println(player.buyUndoActions());
+		System.out.println(player.transferCredit());
+		System.out.println(player.getCredit());
 
 		
 	}
