@@ -1,10 +1,10 @@
-package demo3;
+package riskboardgame;
 
 import java.util.Random;
 import java.util.Arrays;
 
 
-public class Dice {
+public class Dice  {
 	private int roll;
 	private int[] dice;
 	private Random RNum;
