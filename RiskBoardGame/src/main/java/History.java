@@ -1,4 +1,4 @@
-package demo3;
+package riskboardgame;
 
 import java.util.ArrayList;
 import java.util.HashMap;
