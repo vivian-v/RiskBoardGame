@@ -1,7 +1,12 @@
-package demo3;
+
+
 
 import org.junit.Test;
 import junit.framework.TestCase;
+import riskboardgame.Country;
+import riskboardgame.Deck;
+import riskboardgame.Player;
+import riskboardgame.Setup;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,6 +16,13 @@ public class TestSetup extends TestCase {
 	Setup test = new Setup();
 
 
+    @Test
+    public void testLoadDeck() {
+
+    	
+    	Deck testDeck = test.LoadDeck();
+    	assertEquals("Alaska", testDeck.draw().getDetail());
+    }
     @Test
     public void testLoadMap() {
     	HashMap<String, Country> Map = test.LoadMap();

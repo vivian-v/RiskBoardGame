@@ -1,7 +1,9 @@
-package demo3;
+
+
 
 import org.junit.Test;
 import junit.framework.TestCase;
+import riskboardgame.Dice;
 
 
 public class TestDice extends TestCase {

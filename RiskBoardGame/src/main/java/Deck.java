@@ -1,9 +1,9 @@
-package demo3;
+package riskboardgame;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class Deck {
+public class Deck  {
 	private Card card;
 	private ArrayList<Card> deck;
 	

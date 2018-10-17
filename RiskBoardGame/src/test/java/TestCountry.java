@@ -1,9 +1,11 @@
-package demo3;
+
+
 
 
 import org.junit.Before;
 import org.junit.Test;
 import junit.framework.TestCase;
+import riskboardgame.Country;
 
 
 public class TestCountry extends TestCase {
@@ -58,13 +60,13 @@ public class TestCountry extends TestCase {
     }
     @Test
     public void testGetNumOfArmy() {
-    	test.setNumOfArmy(1);
+    	test.addNumOfArmy(1);
     	assertEquals(1, test.getNumOfArmy());
     	
     }
     @Test
-    public void testSetNumOfArmy() {
-     	test.setNumOfArmy(5);
+    public void testAddNumOfArmy() {
+     	test.addNumOfArmy(5);
     	assertEquals(5, test.getNumOfArmy());
     }
 

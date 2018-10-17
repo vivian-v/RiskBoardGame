@@ -1,9 +1,10 @@
-package demo3;
+
 
 import java.io.IOException;
 
 import org.junit.Test;
 import junit.framework.TestCase;
+import riskboardgame.Risk;
 
 
 

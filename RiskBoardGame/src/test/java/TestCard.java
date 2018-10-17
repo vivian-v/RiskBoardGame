@@ -1,7 +1,10 @@
-package demo3;
+
+
+
 
 import org.junit.Test;
 import junit.framework.TestCase;
+import riskboardgame.Card;
 
 
 public class TestCard extends TestCase {

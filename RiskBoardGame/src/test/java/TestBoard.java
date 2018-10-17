@@ -1,10 +1,14 @@
-package demo3;
+
+
 
 
 import java.io.IOException;
 
 import org.junit.Test;
 import junit.framework.TestCase;
+import riskboardgame.Board;
+import riskboardgame.Country;
+import riskboardgame.Setup;
 
 
 public class TestBoard extends TestCase {
@@ -36,14 +40,14 @@ public class TestBoard extends TestCase {
     public void testTransferOwnership() throws IOException
     {
     	Board bd  = new Board(setup.LoadMap(), setup.setupPlayer(2));
-    	assertTrue(bd.transferOwnership("China", "Alberta"));
+    	assertTrue(bd.transferOwnership("China", 0,"Alberta", 1));
     }
 
 	@Test
 	public void testKillPlayer() throws IOException
 	{
     	Board bd  = new Board(setup.LoadMap(), setup.setupPlayer(2));
-    	assertEquals(0, bd.killPlayer(0));
+    	assertEquals(1, bd.killPlayer(0));
 	}
 	@Test
 	public void testArmyPlacement() throws IOException {

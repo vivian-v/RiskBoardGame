@@ -1,7 +1,10 @@
-package demo3;
+
 
 import org.junit.Test;
 import junit.framework.TestCase;
+import riskboardgame.Card;
+import riskboardgame.Country;
+import riskboardgame.Player;
 
 
 
@@ -39,7 +42,7 @@ public class TestPlayer extends TestCase {
 	@Test
 	public void testSetNumOfTroops()
 	{
-		test.setNumOfTroops(20);
+		test.addNumOfTroops(20);
 		assertEquals(60, test.getNumOfTroops());
 	}
 	@Test

@@ -1,9 +1,12 @@
-package demo3;
+
 
 
 
 import org.junit.Test;
 import junit.framework.TestCase;
+import riskboardgame.Card;
+import riskboardgame.Deck;
+
 import java.util.ArrayList;
 
 
