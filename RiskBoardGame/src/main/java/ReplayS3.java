@@ -1,6 +1,7 @@
-package demo3;
+package riskboardgame;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,11 +11,20 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Properties;
 
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.auth.ClasspathPropertiesFileCredentialsProvider;
+import com.amazonaws.auth.PropertiesCredentials;
+import com.amazonaws.auth.PropertiesFileCredentialsProvider;
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
@@ -30,19 +40,44 @@ import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 
 public class ReplayS3 {
-
+	Properties prop = new Properties();
+	InputStream input = null;
 	String bucketName;
 	String key;
-	AWSCredentials credentials;
+    AWSCredentials credentials = null;
 	AmazonS3 s3;
 	Date currentDate;
+	
 	public ReplayS3()
 	{
 		currentDate = new Date();
+		
+		try {
+    		input = new FileInputStream("secret_MeowCat.properties");
+    		prop.load(input);
 
+    		String accessKey = prop.getProperty("accessKey");
+    		String secretKey = prop.getProperty("secretKey");
+
+    	    credentials = new BasicAWSCredentials(accessKey, secretKey);
+
+
+    	} catch (IOException ex) {
+    		ex.printStackTrace();
+    	} finally {
+    		if (input != null) {
+    			try {
+    				input.close();
+    			} catch (IOException e) {
+    				e.printStackTrace();
+    			}
+    		}
+    	}
+		
         s3 = AmazonS3ClientBuilder.standard()
-            .withRegion("us-west-2")
-            .build();
+                .withCredentials(new AWSStaticCredentialsProvider(credentials))
+                .withRegion("us-west-2")
+                .build();
 
         bucketName = "riskdemo3replaynew";
         key = currentDate.toString();
@@ -140,5 +175,7 @@ public class ReplayS3 {
         }
         System.out.println();
     }
+
+
 }
 
