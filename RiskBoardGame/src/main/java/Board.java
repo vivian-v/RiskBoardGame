@@ -1,4 +1,5 @@
-package demo3;
+package riskboardgame;
+
 
 import java.io.ByteArrayInputStream;
 import javax.swing.undo.UndoManager;
@@ -15,7 +16,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.stream.Collectors;
+
+
+
+
 public class Board {
+
 	Dice dice = new Dice();
 	UndoManager dd = new UndoManager();
 	private HashMap<String, Country> Map = new HashMap<String, Country>();
@@ -26,64 +32,53 @@ public class Board {
 	ReplayS3 replay = new ReplayS3();
 	ArrayList<String> s = new ArrayList<String>();
 	File file;
-	//ReplaySystem replay = new ReplaySystem();
-	
+	boolean checkGameEnd = false;
+	String[] playerNameList;
+	int[] playerConquerList;
+	int numDeadPlayers = 0;
+	//Twitter4J tweet = new Twitter4J();
 	public Board(HashMap<String, Country> m, ArrayList<Player> p) throws IOException
 	{
+	
+		
 		int playerTurn = 0;
 		String actionStatus;
 		Map = m;
 		Players = p;
-		//replay.createBucket();
-		//replay.listBuckets();
-		//replay.requestReplay();
 		
-		ArrayList<Card> cd = new ArrayList<Card>();
-		Card c1 = new Card("ddd", "solider");
-		Card c2 = new Card("ddd", "horse");
-
-		Card c3 = new Card("ddd", "cannon");
-		Card c4 = new Card("ddd", "Chang");
-		Players.get(0).addCard(c1);
-		Players.get(0).addCard(c2);
-		Players.get(0).addCard(c3);
-		Players.get(0).addCard(c4);
-		System.out.println(tradeInCard(0));//tradeInCard(0);
-		//checkTypeInCards(cd);
-		
-		
-		
-		
-//		actionStatus = armyPlacement(playerTurn);
-//		history = new History(actionStatus, Players, Map, playerTurn, deck);
-//		actionController.addActionRecord(history);
+//		tweet.connectTwitter(tweet.getKeysNTokens());
+//		loadGameInfo();
 //		
+//	
 //
-//		
-//		file = replay.createFile(s);
-//		replay.putObject(file);
-//		replay.downloadObject();
-//		
-//		this.actionController.undo();
-//		this.actionController.undo();
-//		this.actionController.undo();
-//		this.actionController.undo();
-//		this.actionController.undo();
-//		this.actionController.undo();
-//		this.actionController.undo();
-//		this.actionController.undo();
-
-		
-//		reinforce(0);
+//		armyPlacement(0);
 //		attack(0,1);
-//		fortify(0);
-//		System.out.println(Map.get("Alberta").getOwnerName());
-//		System.out.println(Map.get("Alaska").getOwnerName());
-//
-//		System.out.println(Map.get("Alberta").getNumOfArmy());
+////		
+//		
+		
+
+
+		
 	}
 
 
+	public Board() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public void loadGameInfo()
+	{
+		this.playerNameList = new String[Players.size()];
+		this.playerConquerList = new int[Players.size()];
+		
+		for (int i = 0; i < this.playerNameList.length; i ++)
+		{
+			this.playerNameList[i] = Players.get(i).getPlayerName();
+			this.playerConquerList[i] = 0;
+		}
+		
+		
+	}
 	public String attack (int attackerIndex, int defenderIndex)
 	{
 		s.add(Players.get(attackerIndex).getPlayerName() + " starts to attack " + Players.get(defenderIndex).getPlayerName()+ "\n");
@@ -99,6 +94,8 @@ public class Board {
 		attackerRolls = dice.roll(dice.maxNumDice("Attacker", attackerCountry.getNumOfArmy()));
 		defenderRolls = dice.roll(dice.maxNumDice("Defender", defenderCountry.getNumOfArmy()));
 		
+		
+
 		if (isAttackable(attackerCountry, defenderCountry))
 		{
 			if (attackerRolls[attackerRolls.length - 1] > defenderRolls[defenderRolls.length - 1])
@@ -124,13 +121,28 @@ public class Board {
 			s.add(Players.get(attackerIndex).getPlayerName() + " lost " + numAttackerLose + "\n");
 			s.add(Players.get(defenderIndex).getPlayerName() + " lost " + numDefenderLose + "\n");
 
-			Map.get(attackerCountry.getCountryName()).setNumOfArmy(numAttackerLose * -1);
-			Map.get(defenderCountry.getCountryName()).setNumOfArmy(numDefenderLose * -1);
+			Map.get(attackerCountry.getCountryName()).loseNumOfArmy(numAttackerLose);
+			Map.get(defenderCountry.getCountryName()).loseNumOfArmy(numDefenderLose);
 			
 			if (Map.get(defenderCountry.getCountryName()).getNumOfArmy() < 1)
 			{
-				transferOwnership(attackerCountry.getCountryName(), defenderCountry.getCountryName());
-				killPlayer(defenderIndex);
+				transferOwnership(attackerCountry.getCountryName(), attackerIndex,defenderCountry.getCountryName(), defenderIndex);
+
+				
+				if (Players.get(defenderIndex).getOwnedCountries().size() == 0)
+					killPlayer(defenderIndex);
+				
+				if (gameOver())
+				{
+					checkGameEnd = true;
+					updateGameInfo();
+					postGameInfo();
+
+				} else 
+				{
+					updateGameInfo();
+					postGameInfo();
+				}
 			}
 	
 		} else
@@ -145,59 +157,106 @@ public class Board {
 		return "attack action";
 		
 	}
+	
+	public boolean gameOver()
+	{
+		if ((this.numDeadPlayers + 1) == Players.size())
+			return true;
+		else 
+			return false;
+	}
+	public void updateGameInfo()
+	{
+		for (int i = 0; i < this.playerNameList.length; i++)
+		{
+			this.playerConquerList[i] = Players.get(i).getNumConquered();
+		}
+	}
+	public void postGameInfo()
+	{
+		ArrayList<String> str = new ArrayList<String>();
+		String lines = "";
+
+		if (checkGameEnd)
+		{
+			str.add("Game Over : Conquered Country Numbers by Players\n");
+
+		} else
+		{
+			str.add("Game Info : Conquered Country Numbers by Players\n");
+		}
+		
+		for (int i = 0; i < this.playerNameList.length; i++)
+		{
+			str.add(this.playerNameList[i] + " : " + this.playerConquerList[i] + "\n");
+		}
+		for (int i = 0; i < str.size(); i++)
+		{
+			lines += str.get(i);
+		}
+		//tweet.postTweet(lines);
+	}
 	public boolean isAttackable(Country c1, Country c2)
 	{
 		if (!c1.getAdjacency().contains(c2.getCountryName()) || c1.getOwnerName().equals(c2.getOwnerName()) || c1.getNumOfArmy() < 2)
 		{
 			return false;
 		}
-		
+
 		return true;	
 	}
-	public boolean transferOwnership(String attackerCountry, String defenderCountry)
+	public boolean transferOwnership(String attackerCountry, int attackerIndex,String defenderCountry, int defenderIndex)
 	{
 		if (attackerCountry == defenderCountry)
 			return false;
 		Map.get(defenderCountry).setOwnerName((Map.get(attackerCountry).getOwnerName()));
-		Map.get(defenderCountry).setNumOfArmy(1);
-		Map.get(attackerCountry).setNumOfArmy(-1);
+		Map.get(defenderCountry).addNumOfArmy(1);
+		Map.get(attackerCountry).loseNumOfArmy(1);
+		
+		Players.get(attackerIndex).takeCountry(Map.get(defenderCountry));
+		Players.get(attackerIndex).increaseNumConquered();
+		Players.get(defenderIndex).loseCountry(Map.get(defenderCountry));
+		
+		//add tweets
+		
 		return true;
 	}
 	public int killPlayer(int playerIndex)
 	{
-		Players.remove(playerIndex);
-		return playerIndex;
+		Players.get(playerIndex).killPlayer();
+		this.numDeadPlayers++;
+		return this.numDeadPlayers;
 	}
 	public String armyPlacement(int playerIndex)
 	{
 		s.add(Players.get(playerIndex).getPlayerName() + " starts to army placement\n");
 
 		int index = 0;
-		int num = 4;
+		int num = 2;
 		String pickedCountry = "Alberta";
 		
 		Map.get(pickedCountry).setOwnerName(Players.get(index).getPlayerName());
-		Map.get(pickedCountry).setNumOfArmy(num);
-		Players.get(playerIndex).setNumOfTroops(num * -1);
+		Map.get(pickedCountry).addNumOfArmy(10);
+		Players.get(playerIndex).loseNumOfTroops(10);
 		Players.get(playerIndex).takeCountry(Map.get(pickedCountry));
 		s.add(Players.get(playerIndex).getPlayerName() + " take " + pickedCountry+ " with " + num + " army" + "\n");
 
 		
-		//index++;
-		
+		index++;
+		num = 1;
 		pickedCountry = "Alaska";
 		Map.get(pickedCountry).setOwnerName(Players.get(index).getPlayerName());
-		Map.get(pickedCountry).setNumOfArmy(num);
-		Players.get(playerIndex).setNumOfTroops(num * -1);
+		Map.get(pickedCountry).addNumOfArmy(num);
+		Players.get(playerIndex).loseNumOfTroops(num);
 		Players.get(playerIndex).takeCountry(Map.get(pickedCountry));
 		s.add(Players.get(playerIndex).getPlayerName() + " take " + pickedCountry+ " with " + num + " army" + "\n");
-
-		pickedCountry = "Central America";
-		Map.get(pickedCountry).setOwnerName(Players.get(index).getPlayerName());
-		Map.get(pickedCountry).setNumOfArmy(num);
-		Players.get(playerIndex).setNumOfTroops(num * -1);
-		Players.get(playerIndex).takeCountry(Map.get(pickedCountry));
-		s.add(Players.get(playerIndex).getPlayerName() + " take " + pickedCountry+ " with " + num + " army" + "\n");
+//
+//		pickedCountry = "Central America";
+//		Map.get(pickedCountry).setOwnerName(Players.get(index).getPlayerName());
+//		Map.get(pickedCountry).addNumOfArmy(num);
+//		Players.get(playerIndex).loseNumOfTroops(num);
+//		Players.get(playerIndex).takeCountry(Map.get(pickedCountry));
+//		s.add(Players.get(playerIndex).getPlayerName() + " take " + pickedCountry+ " with " + num + " army" + "\n");
 
 		return "army placement action";
 	}
@@ -240,7 +299,7 @@ public class Board {
 		totalTroops = troopsByTerritory + troopsByRegion;
 		
 		
-		Players.get(playerIndex).setNumOfTroops(totalTroops);
+		Players.get(playerIndex).addNumOfTroops(totalTroops);
 		s.add(Players.get(playerIndex).getPlayerName() + " earn " + totalTroops + " from reinforcement\n");
 
 		//System.out.println(troopsByTerritory + troopsByRegion);
@@ -323,7 +382,10 @@ public class Board {
 			return 0;
 		
 	}
-
+	public void displayNumConquered()
+	{
+		
+	}
 	public boolean isTradable(String[] c)
 	{
 		ArrayList<Integer> numLists = new ArrayList<Integer>();
@@ -370,8 +432,8 @@ public class Board {
 		
 		if (isFortifiable(fromCountry, toCountry))
 		{
-			Map.get(fromCountry.getCountryName()).setNumOfArmy(numTrasferArmy * -1);
-			Map.get(toCountry.getCountryName()).setNumOfArmy(numTrasferArmy);
+			Map.get(fromCountry.getCountryName()).loseNumOfArmy(numTrasferArmy);
+			Map.get(toCountry.getCountryName()).addNumOfArmy(numTrasferArmy);
 		}
 		
 		s.add(Players.get(playerIndex).getPlayerName() + " fortify from" + fromCountry.getCountryName()+ " to " + toCountry.getCountryName() + "\n");
@@ -386,4 +448,8 @@ public class Board {
 		}
 		return true;
 	}
+
+
+
+
 }
