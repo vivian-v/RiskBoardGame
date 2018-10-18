@@ -1,6 +1,7 @@
 package riskboardgame;
 
 
+
 import java.io.ByteArrayInputStream;
 import javax.swing.undo.UndoManager;
 import java.io.ByteArrayOutputStream;
@@ -37,7 +38,7 @@ public class Board {
 	String[] playerNameList;
 	int[] playerConquerList;
 	int numDeadPlayers = 0;
-	//Twitter4J tweet = new Twitter4J();
+	Twitter4J tweet = new Twitter4J();
 	public Board(HashMap<String, Country> m, ArrayList<Player> p) throws IOException
 	{
 	
@@ -47,13 +48,16 @@ public class Board {
 		Map = m;
 		Players = p;
 		
-//		tweet.connectTwitter(tweet.getKeysNTokens());
-//		loadGameInfo();
-//		
-//	
-//
-//		armyPlacement(0);
-//		attack(0,1);
+		tweet.connectTwitter(tweet.getKeysNTokens());
+		loadGameInfo();
+		
+	
+
+		armyPlacement(0);
+		attack(0,1);
+		
+		updateGameInfo();
+		postGameInfo();
 ////		
 //		
 		
@@ -147,14 +151,10 @@ public class Board {
 				if (gameOver())
 				{
 					checkGameEnd = true;
-					updateGameInfo();
-					postGameInfo();
+					
+					
 
-				} else 
-				{
-					updateGameInfo();
-					postGameInfo();
-				}
+				} 
 			}
 	
 		} else
@@ -206,7 +206,7 @@ public class Board {
 		{
 			lines += str.get(i);
 		}
-		//tweet.postTweet(lines);
+		tweet.postTweet(lines);
 	}
 	public boolean isAttackable(Country c1, Country c2)
 	{
