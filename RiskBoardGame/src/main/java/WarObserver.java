@@ -17,10 +17,13 @@ public class WarObserver implements Observable {
 	}
 
 	@Override
-	public void notifyWarObservers() {
+	public int notifyWarObservers() {
+		int index = 0;
 		for (Observer ob : warObservers) {
             ob.update();
+            index++;
      }
+		return index;
 
 
 	}
