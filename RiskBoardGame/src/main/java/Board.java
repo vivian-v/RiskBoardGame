@@ -13,16 +13,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Stack;
-import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
-
-
+import org.telegram.telegrambots.ApiContextInitializer;
+import org.telegram.telegrambots.TelegramBotsApi;
+import org.telegram.telegrambots.exceptions.TelegramApiException;
 
 public class Board {
-
+	int gameId;
 	Dice dice = new Dice();
 	UndoManager dd = new UndoManager();
 	private HashMap<String, Country> Map = new HashMap<String, Country>();
@@ -30,7 +32,7 @@ public class Board {
 	Deck deck = new Deck();
 	UndoSystem actionController = new UndoSystem();
 	History history;
-	ReplayS3 replay = new ReplayS3();
+	//ReplayS3 replay = new ReplayS3();
 	ArrayList<String> s = new ArrayList<String>();
 	File file;
 	WarObserver warObserver = new WarObserver();
@@ -38,7 +40,10 @@ public class Board {
 	String[] playerNameList;
 	int[] playerConquerList;
 	int numDeadPlayers = 0;
-	//Twitter4J tweet = new Twitter4J();
+//	TwitterSystem tweet = new TwitterSystem();
+	//MyBot mybot = new MyBot();
+    private static int nextplayerIndex;
+
 	public Board(HashMap<String, Country> m, ArrayList<Player> p) throws IOException
 	{
 	
@@ -47,34 +52,95 @@ public class Board {
 		String actionStatus;
 		Map = m;
 		Players = p;
+
+		gameId = 0;
+		System.out.println("xxx");
+
+        Timer timer1 = new Timer();
+
+        nextplayerIndex = 0;
+        int currentPlayerIndex = 0;
+        
+        long period1 = 3 * 1000; // 3 seconds
+      
+        timer1.schedule(new Task("Do you want to attack?") , 0 , period1);
+       
+        Scanner keyboard = new Scanner(System.in);
+  		int numPlayers = 4;
+  		numPlayers = keyboard.nextInt();
+  		
+  		if ((currentPlayerIndex == nextplayerIndex))
+  		{
+	        if (numPlayers == 5)
+	        	timer1.cancel();
+	        timer1.schedule(new Task("Do you want to fortify?") , 0 , period1);
+	  		numPlayers = keyboard.nextInt();
+  		}
+      
+        
+        
+        
+  		System.out.println(nextplayerIndex);
+
+        
+        
+        
+        
+        
+		System.out.println("xxxx");
 		
-//		tweet.connectTwitter(tweet.getKeysNTokens());
-//		loadGameInfo();
-//		
-//	
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+//		MyBot mybot = new MyBot();
+//		//mybot.joinGameBot("Chang");
+//		System.out.println("ddff");
+		
+//        ApiContextInitializer.init();
 //
-//		armyPlacement(0);
-//		attack(0,1);
-//		
-//		updateGameInfo();
-//		postGameInfo();
-////		
-//		
-		
-		warObserver.addObserver(Players.get(0));
-		warObserver.addObserver(Players.get(1));
-		warObserver.notifyWarObservers();
-		
-		Transaction player = new Proxy(20);
-	
-		System.out.println(player.getCredit());
+//        TelegramBotsApi botsApi = new TelegramBotsApi();
+//
+//        try {
+//            botsApi.registerBot(new MyBot());
+//        } catch (TelegramApiException e) {
+//            e.printStackTrace();
+//        }
+	}
 
-		System.out.println(player.buyCards());
-		System.out.println(player.buyUndoActions());
-		System.out.println(player.transferCredit());
-		System.out.println(player.getCredit());
+	class Task extends TimerTask
+	{
+	    private String m_name;
+	    boolean check = false;
 
-		
+	    public Task(String name)
+	    {
+	        this.m_name = name;
+	    }
+
+	    public void run()
+	    {
+	    	if (check == true)
+	    	{
+	            System.out.println("Time is up");
+	            nextplayerIndex++;
+
+	            check = false;
+	            cancel();
+	    	}else {
+	            System.out.println(this.m_name);
+	            check = true;
+	    	}
+	    }
 	}
 
 
@@ -99,6 +165,12 @@ public class Board {
 	{
 		s.add(Players.get(attackerIndex).getPlayerName() + " starts to attack " + Players.get(defenderIndex).getPlayerName()+ "\n");
 
+		warObserver.addObserver(Players.get(defenderIndex));
+		warObserver.addObserver(Players.get(attackerIndex));
+
+		warObserver.removeObserver(Players.get(defenderIndex));
+		warObserver.notifyWarObservers();
+		
 		int[] attackerRolls;
 		int[] defenderRolls;
 		int numAttackerLose = 0;
@@ -151,10 +223,14 @@ public class Board {
 				if (gameOver())
 				{
 					checkGameEnd = true;
-					
-					
+					updateGameInfo();
+					postGameInfo();
 
-				} 
+				} else 
+				{
+					updateGameInfo();
+					postGameInfo();
+				}
 			}
 	
 		} else
@@ -206,7 +282,7 @@ public class Board {
 		{
 			lines += str.get(i);
 		}
-		//tweet.postTweet(lines);
+//		tweet.postTweet(lines);
 	}
 	public boolean isAttackable(Country c1, Country c2)
 	{
