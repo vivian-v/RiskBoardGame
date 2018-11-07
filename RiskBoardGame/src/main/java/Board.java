@@ -11,17 +11,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Stack;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.stream.Collectors;
 
-import org.telegram.telegrambots.ApiContextInitializer;
-import org.telegram.telegrambots.TelegramBotsApi;
-import org.telegram.telegrambots.exceptions.TelegramApiException;
+
+
 
 public class Board {
 	int gameId;
@@ -41,7 +35,7 @@ public class Board {
 	int[] playerConquerList;
 	int numDeadPlayers = 0;
 //	TwitterSystem tweet = new TwitterSystem();
-	//MyBot mybot = new MyBot();
+	MyBot mybot = new MyBot();
     private static int nextplayerIndex;
 
 	public Board(HashMap<String, Country> m, ArrayList<Player> p) throws IOException
@@ -58,31 +52,31 @@ public class Board {
 
         Timer timer1 = new Timer();
 
-        nextplayerIndex = 0;
-        int currentPlayerIndex = 0;
-        
-        long period1 = 3 * 1000; // 3 seconds
-      
-        timer1.schedule(new Task("Do you want to attack?") , 0 , period1);
-       
-        Scanner keyboard = new Scanner(System.in);
-  		int numPlayers = 4;
-  		numPlayers = keyboard.nextInt();
-  		
-  		if ((currentPlayerIndex == nextplayerIndex))
-  		{
-	        if (numPlayers == 5)
-	        	timer1.cancel();
-	        timer1.schedule(new Task("Do you want to fortify?") , 0 , period1);
-	  		numPlayers = keyboard.nextInt();
-  		}
-      
-        
-        
-        
-  		System.out.println(nextplayerIndex);
-
-        
+//        nextplayerIndex = 0;
+//        int currentPlayerIndex = 0;
+//        
+//        long period1 = 3 * 1000; // 3 seconds
+//      
+//        timer1.schedule(new Task("Do you want to attack?") , 0 , period1);
+//       
+//        Scanner keyboard = new Scanner(System.in);
+//  		int numPlayers = 4;
+//  		numPlayers = keyboard.nextInt();
+//  		
+//  		if ((currentPlayerIndex == nextplayerIndex))
+//  		{
+//	        if (numPlayers == 5)
+//	        	timer1.cancel();
+//	        timer1.schedule(new Task("Do you want to fortify?") , 0 , period1);
+//	  		numPlayers = keyboard.nextInt();
+//  		}
+//      
+//        
+//        
+//        
+//  		System.out.println(nextplayerIndex);
+//
+//        
         
         
         
