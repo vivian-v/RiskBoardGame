@@ -8,6 +8,7 @@ import javax.swing.undo.UndoManager;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.exceptions.TelegramApiException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -45,12 +46,14 @@ public class Board extends TelegramLongPollingBot{
 	String[] playerNameList;
 	int[] playerConquerList;
 	int numDeadPlayers = 0;
-//	TwitterSystem tweet = new TwitterSystem();
+	//TwitterSystem tweet = new TwitterSystem();
 	//MyBot mybot = new MyBot();
     private static int nextplayerIndex;
     private static boolean dir;
     Timer timer1 = new Timer();
 
+   
+    
 	public Board(HashMap<String, Country> m, ArrayList<Player> p) throws IOException
 	{
 		gameReady = false;
@@ -62,11 +65,10 @@ public class Board extends TelegramLongPollingBot{
 		Map = m;
 		Players = p;
 
-	
+
+
 
 		
-		
-
 //		while (totalNumParticipants < 3) {
 //			System.out.println("not enough player");
 //			try {
@@ -82,14 +84,14 @@ public class Board extends TelegramLongPollingBot{
         nextplayerIndex = 0;
         int currentPlayerIndex = 0;
         
-        long period1 = 30 * 1000; // 30 seconds
+        long period1 = 10 * 1000; // 30 seconds
       
         timer1.schedule(new Task("Do you want to attack?" + Players.get(nextplayerIndex).getPlayerName()) , 0 , period1);
        
 //        Scanner keyboard = new Scanner(System.in);
 //  		int numPlayers = 4;
 //  		numPlayers = keyboard.nextInt();
-  		
+//  		
   		
   		
   		
@@ -108,38 +110,7 @@ public class Board extends TelegramLongPollingBot{
         
   		System.out.println(nextplayerIndex);
 
-        
-        
-        
-        
-        
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-//		MyBot mybot = new MyBot();
-//		//mybot.joinGameBot("Chang");
-//		System.out.println("ddff");
-		
-//        ApiContextInitializer.init();
-//
-//        TelegramBotsApi botsApi = new TelegramBotsApi();
-//
-//        try {
-//            botsApi.registerBot(new MyBot());
-//        } catch (TelegramApiException e) {
-//            e.printStackTrace();
-//        }
+
 	}
 
 	class Task extends TimerTask
@@ -189,6 +160,7 @@ public class Board extends TelegramLongPollingBot{
 	public String attack (int attackerIndex, int defenderIndex)
 	{
 		s.add(Players.get(attackerIndex).getPlayerName() + " starts to attack " + Players.get(defenderIndex).getPlayerName()+ "\n");
+		botresponse("start attacking");
 
 		warObserver.addObserver(Players.get(attackerIndex));
 
@@ -306,7 +278,7 @@ public class Board extends TelegramLongPollingBot{
 		{
 			lines += str.get(i);
 		}
-//		tweet.postTweet(lines);
+		//tweet.postTweet(lines);
 	}
 	public boolean isAttackable(Country c1, Country c2)
 	{
@@ -342,7 +314,9 @@ public class Board extends TelegramLongPollingBot{
 	public String armyPlacement(int playerIndex)
 	{
 		s.add(Players.get(playerIndex).getPlayerName() + " starts to army placement\n");
-		System.out.println("start placing armies");
+		//System.out.println("start placing armies");
+		botresponse("start placing armies");
+
 
 		int index = 0;
 		int num = 2;
@@ -388,8 +362,8 @@ public class Board extends TelegramLongPollingBot{
 	public String reinforce(int playerIndex)
 	{
 		s.add(Players.get(playerIndex).getPlayerName() + " starts to reinforce\n");
-		System.out.println("start reinforcing");
-
+		//System.out.println("start reinforcing");
+		botresponse("start reinforcing");
 		int totalTroops = 0;
 		int troopsByTerritory = 0;
 		int troopsByRegion = 0;
@@ -539,7 +513,13 @@ public class Board extends TelegramLongPollingBot{
 	public String fortify(int playerIndex)
 	{
 		s.add(Players.get(playerIndex).getPlayerName() + " starts to fortify his/her country\n");
-		System.out.println("start fortifying");
+		
+		
+		//System.out.println("start fortifying");
+		botresponse("start fortifying");
+
+		
+		
 		int numTrasferArmy = 2;
 		Country fromCountry = fromCountry("Alberta");
 		Country toCountry = toCountry("Alaska");
@@ -589,12 +569,12 @@ public class Board extends TelegramLongPollingBot{
                     .setChatId(chat_id)
                     .setText(answer);
             
-            int x;
-            x = log(user_first_name, user_last_name, Long.toString(user_id), message_text, answer);
+            
+            int x = log(user_first_name, user_last_name, Long.toString(user_id), message_text, answer);
            
             if (gameReady)
             {
-            if (x == 0)
+            	if (x == 0)
             	armyPlacement(0);
             else if (x == 1)
             	reinforce(0);
@@ -603,47 +583,12 @@ public class Board extends TelegramLongPollingBot{
             else if (x == 3)
             	fortify(0);
             }
-//            try {
-//                execute(message); // Sending our message object to user
-//            } catch (TelegramApiException e) {
-//                e.printStackTrace();
-//            }
-//            
-//            
+           
+            
+            
             
         }
     }
-	   
-	   private int log(String first_name, String last_name, String user_id, String txt, String bot_answer) {
-	        System.out.println("\n ----------------------------");
-	        System.out.println("Message from " + first_name + " " + last_name + ". (id = " + user_id + ") \n Text - " + txt);
-
-	        if (txt.equals("place"))
-	        {
-	        	timer1.cancel();
-	        	return 0;
-	        }	
-	        else if (txt.equals("reinforce"))
-	        {
-	        	timer1.cancel();
-	        	return 1;
-	        } else if (txt.equals("attack"))
-	        {
-	        	timer1.cancel();
-	        	return 2;
-	        }
-	        else if (txt.equals("fortify"))
-	        {
-	        	timer1.cancel();
-	        	return 3;
-	        }else if (txt.equals(gameId))
-	        {	        	
-	        	this.totalNumParticipants++;
-	        }
-	   
-	        return 0;
-	   }
-	   
 
 	   
 	   
