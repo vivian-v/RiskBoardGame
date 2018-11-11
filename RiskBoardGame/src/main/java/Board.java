@@ -589,6 +589,51 @@ public class Board extends TelegramLongPollingBot{
             
         }
     }
+	   public void botresponse(String s)
+	   {
+		   String answer = s;
+		    long chat_id = 790551886;
+		    
+		    SendMessage message = new SendMessage() // Create a message object object
+		            .setChatId(chat_id)
+		            .setText(answer);
+		    
+		   try {
+               execute(message); // Sending our message object to user
+           } catch (TelegramApiException e) {
+               e.printStackTrace();
+           }
+	   }
+	   private int log(String first_name, String last_name, String user_id, String txt, String bot_answer) {
+	        System.out.println("\n ----------------------------");
+	        System.out.println("Message from " + first_name + " " + last_name + ". (id = " + user_id + ") \n Text - " + txt);
+
+	        if (txt.equals("/place"))
+	        {
+	        	timer1.cancel();
+	        	return 0;
+	        }	
+	        else if (txt.equals("/reinforce"))
+	        {
+	        	timer1.cancel();
+	        	return 1;
+	        } else if (txt.equals("/attack"))
+	        {
+	        	timer1.cancel();
+	        	return 2;
+	        }
+	        else if (txt.equals("/fortify"))
+	        {
+	        	timer1.cancel();
+	        	return 3;
+	        }else if (txt.equals(gameId))
+	        {	        	
+	        	this.totalNumParticipants++;
+	        }
+	   
+	        return -1;
+	   }
+	   
 
 	   
 	   
