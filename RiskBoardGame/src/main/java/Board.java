@@ -65,19 +65,45 @@ public class Board extends TelegramLongPollingBot{
 		Map = m;
 		Players = p;
 
+		
+		
+		//Time requirement
+		
+		
+		while (totalNumParticipants < 3) {
+		System.out.println("not enough player");
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 
+	}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		//Chatbot requirement
+		
 
 
 		
-//		while (totalNumParticipants < 3) {
-//			System.out.println("not enough player");
-//			try {
-//				Thread.sleep(5000);
-//			} catch (InterruptedException e) {
-//				e.printStackTrace();
-//			}
-//
-//		}
+
 		System.out.println("Game Start");
 		gameReady = true;
 
@@ -88,16 +114,16 @@ public class Board extends TelegramLongPollingBot{
       
         timer1.schedule(new Task("Do you want to attack?" + Players.get(nextplayerIndex).getPlayerName()) , 0 , period1);
        
-//        Scanner keyboard = new Scanner(System.in);
-//  		int numPlayers = 4;
-//  		numPlayers = keyboard.nextInt();
-//  		
+        Scanner keyboard = new Scanner(System.in);
+  		int numPlayers = 4;
+  		numPlayers = keyboard.nextInt();
+  		
   		
   		
   		
   		if ((currentPlayerIndex == nextplayerIndex))
   		{
-  	        timer1.schedule(new Task("Do you want to attack?" + Players.get(nextplayerIndex).getPlayerName()) , 0 , period1);
+  	        timer1.schedule(new Task("Do you want to reinforce?" + Players.get(nextplayerIndex).getPlayerName()) , 0 , period1);
 	  		//numPlayers = keyboard.nextInt();
   		} else
   		{
