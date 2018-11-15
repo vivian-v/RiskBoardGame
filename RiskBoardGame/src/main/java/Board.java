@@ -68,19 +68,19 @@ public class Board extends TelegramLongPollingBot{
 		
 		
 		//Time requirement
-		
-		
-		while (totalNumParticipants < 3) {
-		System.out.println("not enough player");
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-
-		}
-		
-		
+//		
+//		
+//		while (totalNumParticipants < 3) {
+//		System.out.println("not enough player");
+//		try {
+//			Thread.sleep(5000);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
+//
+//		}
+//		
+//		
 		
 		
 		
@@ -113,12 +113,12 @@ public class Board extends TelegramLongPollingBot{
         long period1 = 30 * 1000; // 30 seconds
       
         timer1.schedule(new Task("Do you want to attack?" + Players.get(nextplayerIndex).getPlayerName()) , 0 , period1);
-       
-        Scanner keyboard = new Scanner(System.in);
-  		int numPlayers = 4;
-  		numPlayers = keyboard.nextInt();
-  		
-  		
+//       
+//        Scanner keyboard = new Scanner(System.in);
+//  		int numPlayers = 4;
+//  		numPlayers = keyboard.nextInt();
+//  		
+//  		
   		
   		
   		if ((currentPlayerIndex == nextplayerIndex))
