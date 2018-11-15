@@ -78,7 +78,7 @@ public class Board extends TelegramLongPollingBot{
 			e.printStackTrace();
 		}
 
-	}
+		}
 		
 		
 		
@@ -110,7 +110,7 @@ public class Board extends TelegramLongPollingBot{
         nextplayerIndex = 0;
         int currentPlayerIndex = 0;
         
-        long period1 = 10 * 1000; // 30 seconds
+        long period1 = 30 * 1000; // 30 seconds
       
         timer1.schedule(new Task("Do you want to attack?" + Players.get(nextplayerIndex).getPlayerName()) , 0 , period1);
        
