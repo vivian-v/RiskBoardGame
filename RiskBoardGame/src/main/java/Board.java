@@ -26,7 +26,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 
 
-public class Board extends TelegramLongPollingBot{
+public class Board /*extends TelegramLongPollingBot*/{
 	Lock lock = new ReentrantLock();
 	private static boolean gameReady;
 	private static String gameId;
@@ -46,12 +46,10 @@ public class Board extends TelegramLongPollingBot{
 	String[] playerNameList;
 	int[] playerConquerList;
 	int numDeadPlayers = 0;
-	//TwitterSystem tweet = new TwitterSystem();
-	//MyBot mybot = new MyBot();
     private static int nextplayerIndex;
     private static boolean dir;
     Timer timer1 = new Timer();
-
+    MyBot mybot = new MyBot();
    
     
 	public Board(HashMap<String, Country> m, ArrayList<Player> p) throws IOException
@@ -67,74 +65,6 @@ public class Board extends TelegramLongPollingBot{
 
 		
 		
-		//Time requirement
-//		
-//		
-//		while (totalNumParticipants < 3) {
-//		System.out.println("not enough player");
-//		try {
-//			Thread.sleep(5000);
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
-//
-//		}
-//		
-//		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		//Chatbot requirement
-		
-
-
-		
-
-		System.out.println("Game Start");
-		gameReady = true;
-
-        nextplayerIndex = 0;
-        int currentPlayerIndex = 0;
-        
-        long period1 = 30 * 1000; // 30 seconds
-      
-        timer1.schedule(new Task("Do you want to attack?" + Players.get(nextplayerIndex).getPlayerName()) , 0 , period1);
-//       
-//        Scanner keyboard = new Scanner(System.in);
-//  		int numPlayers = 4;
-//  		numPlayers = keyboard.nextInt();
-//  		
-//  		
-  		
-  		
-  		if ((currentPlayerIndex == nextplayerIndex))
-  		{
-  	        timer1.schedule(new Task("Do you want to reinforce?" + Players.get(nextplayerIndex).getPlayerName()) , 0 , period1);
-	  		//numPlayers = keyboard.nextInt();
-  		} else
-  		{
-  	        timer1.schedule(new Task("Do you want to attack?" + Players.get(nextplayerIndex).getPlayerName()) , 0 , period1);
-
-  		}
-      
-        
-        
-        
-  		System.out.println(nextplayerIndex);
 
 
 	}
@@ -185,13 +115,12 @@ public class Board extends TelegramLongPollingBot{
 	}
 	public String attack (int attackerIndex, int defenderIndex)
 	{
-		s.add(Players.get(attackerIndex).getPlayerName() + " starts to attack " + Players.get(defenderIndex).getPlayerName()+ "\n");
-		botresponse("start attacking");
+//		s.add(Players.get(attackerIndex).getPlayerName() + " starts to attack " + Players.get(defenderIndex).getPlayerName()+ "\n");
+//		botresponse("start attacking");
 
-		warObserver.addObserver(Players.get(attackerIndex));
-
-		warObserver.notifyWarObservers();
-		warObserver.removeObserver(Players.get(attackerIndex));
+//		warObserver.addObserver(Players.get(attackerIndex));
+//		warObserver.notifyWarObservers();
+//		warObserver.removeObserver(Players.get(attackerIndex));
 		
 		int[] attackerRolls;
 		int[] defenderRolls;
@@ -326,7 +255,7 @@ public class Board extends TelegramLongPollingBot{
 		Players.get(attackerIndex).takeCountry(Map.get(defenderCountry));
 		Players.get(attackerIndex).increaseNumConquered();
 		Players.get(defenderIndex).loseCountry(Map.get(defenderCountry));
-		
+
 		//add tweets
 		
 		return true;
@@ -341,7 +270,7 @@ public class Board extends TelegramLongPollingBot{
 	{
 		s.add(Players.get(playerIndex).getPlayerName() + " starts to army placement\n");
 		//System.out.println("start placing armies");
-		botresponse("start placing armies");
+	//	botresponse("start placing armies");
 
 
 		int index = 0;
@@ -371,6 +300,13 @@ public class Board extends TelegramLongPollingBot{
 //		Players.get(playerIndex).takeCountry(Map.get(pickedCountry));
 //		s.add(Players.get(playerIndex).getPlayerName() + " take " + pickedCountry+ " with " + num + " army" + "\n");
 
+		
+		
+		
+		
+		
+		
+		
 		return "army placement action";
 	}
 
@@ -389,7 +325,7 @@ public class Board extends TelegramLongPollingBot{
 	{
 		s.add(Players.get(playerIndex).getPlayerName() + " starts to reinforce\n");
 		//System.out.println("start reinforcing");
-		botresponse("start reinforcing");
+		//botresponse("start reinforcing");
 		int totalTroops = 0;
 		int troopsByTerritory = 0;
 		int troopsByRegion = 0;
@@ -542,7 +478,7 @@ public class Board extends TelegramLongPollingBot{
 		
 		
 		//System.out.println("start fortifying");
-		botresponse("start fortifying");
+		//botresponse("start fortifying");
 
 		
 		
@@ -569,110 +505,128 @@ public class Board extends TelegramLongPollingBot{
 		return true;
 	}
 
-	@Override
-    public void onUpdateReceived(Update update) {
-
-        // We check if the update has a message and the message has text
-        if (update.hasMessage() && update.getMessage().hasText()) {
-            // Set variables
-            String user_first_name = update.getMessage().getChat().getFirstName();
-            
-            String user_last_name = update.getMessage().getChat().getLastName();
-            
-            String user_username = update.getMessage().getChat().getUserName();
-            
-            long user_id = update.getMessage().getChat().getId();
-            
-            String message_text = update.getMessage().getText();
-            
-            //long chat_id = -271143153;
-            long chat_id = update.getMessage().getChatId();
-            //String answer = "why it doesn't work...";
-            String answer = message_text;
-            
-            
-            SendMessage message = new SendMessage() // Create a message object object
-                    .setChatId(chat_id)
-                    .setText(answer);
-            
-            
-            int x = log(user_first_name, user_last_name, Long.toString(user_id), message_text, answer);
-           
-            if (gameReady)
-            {
-            	if (x == 0)
-            	armyPlacement(0);
-            else if (x == 1)
-            	reinforce(0);
-            else if (x == 2)
-            	attack(0,1);
-            else if (x == 3)
-            	fortify(0);
-            }
-           
-            
-            
-            
-        }
-    }
-	   public void botresponse(String s)
-	   {
-		   String answer = s;
-		    long chat_id = 790551886;
-		    
-		    SendMessage message = new SendMessage() // Create a message object object
-		            .setChatId(chat_id)
-		            .setText(answer);
-		    
-		   try {
-               execute(message); // Sending our message object to user
-           } catch (TelegramApiException e) {
-               e.printStackTrace();
-           }
-	   }
-	   private int log(String first_name, String last_name, String user_id, String txt, String bot_answer) {
-	        System.out.println("\n ----------------------------");
-	        System.out.println("Message from " + first_name + " " + last_name + ". (id = " + user_id + ") \n Text - " + txt);
-
-	        if (txt.equals("/place"))
-	        {
-	        	timer1.cancel();
-	        	return 0;
-	        }	
-	        else if (txt.equals("/reinforce"))
-	        {
-	        	timer1.cancel();
-	        	return 1;
-	        } else if (txt.equals("/attack"))
-	        {
-	        	timer1.cancel();
-	        	return 2;
-	        }
-	        else if (txt.equals("/fortify"))
-	        {
-	        	timer1.cancel();
-	        	return 3;
-	        }else if (txt.equals(gameId))
-	        {	        	
-	        	this.totalNumParticipants++;
-	        }
-	   
-	        return -1;
-	   }
-	   
-
-	   
-	   
-	   
-	    @Override
-	    public String getBotUsername() {
-	        return "RiskGameBot";
-	    }
- 
-	    @Override
-	    public String getBotToken() {
-	        return "718366234:AAHZ64pich1qeITo4J2S8CmauBCfPSqCkQY";
-	    }
+//	@Override
+//    public void onUpdateReceived(Update update) {
+//
+//        // We check if the update has a message and the message has text
+//        if (update.hasMessage() && update.getMessage().hasText()) {
+//            // Set variables
+//            String user_first_name = update.getMessage().getChat().getFirstName();
+//            
+//            String user_last_name = update.getMessage().getChat().getLastName();
+//            
+//            String user_username = update.getMessage().getChat().getUserName();
+//            
+//            long user_id = update.getMessage().getChat().getId();
+//            
+//            String message_text = update.getMessage().getText();
+//            
+//            //long chat_id = -271143153;
+//            long chat_id = update.getMessage().getChatId();
+//            //String answer = "why it doesn't work...";
+//            String answer = message_text;
+//            
+//            
+//            SendMessage message = new SendMessage() // Create a message object object
+//                    .setChatId(chat_id)
+//                    .setText(answer);
+//            
+//            
+//            int x = log(user_first_name, user_last_name, Long.toString(user_id), message_text, answer);
+//           
+//            if (gameReady)
+//            {
+//            	if (x == 0)
+//            	armyPlacement(0);
+//            else if (x == 1)
+//            	reinforce(0);
+//            else if (x == 2)
+//            	attack(0,1);
+//            else if (x == 3)
+//            	fortify(0);
+//            }
+//           
+//            
+//            
+//            
+//        }
+//    }
+//	 @Override
+//	    public void onUpdateReceived(Update update) {
+//
+//	        // We check if the update has a message and the message has text
+//	        if (update.hasMessage() && update.getMessage().hasText()) {
+//	            // Set variables
+//	            String message_text = update.getMessage().getText();
+//	            long chat_id = update.getMessage().getChatId();
+//
+//	            SendMessage message = new SendMessage() // Create a message object object
+//	                .setChatId(chat_id)
+//	                .setText(message_text);
+//	            try {
+//	                execute(message); // Sending our message object to user
+//	            } catch (TelegramApiException e) {
+//	                e.printStackTrace();
+//	            }
+//	        }
+//	    }
+//
+//	   public void botresponse(String s)
+//	   {
+//		   String answer = s;
+//		    long chat_id = 790551886;
+//		    
+//		    SendMessage message = new SendMessage() // Create a message object object
+//		            .setChatId(chat_id)
+//		            .setText(answer);
+//		    
+//		   try {
+//               execute(message); // Sending our message object to user
+//           } catch (TelegramApiException e) {
+//               e.printStackTrace();
+//           }
+//	   }
+//	   private int log(String first_name, String last_name, String user_id, String txt, String bot_answer) {
+//	        System.out.println("\n ----------------------------");
+//	        System.out.println("Message from " + first_name + " " + last_name + ". (id = " + user_id + ") \n Text - " + txt);
+//
+//	        if (txt.equals("/place"))
+//	        {
+//	        	timer1.cancel();
+//	        	return 0;
+//	        }	
+//	        else if (txt.equals("/reinforce"))
+//	        {
+//	        	timer1.cancel();
+//	        	return 1;
+//	        } else if (txt.equals("/attack"))
+//	        {
+//	        	timer1.cancel();
+//	        	return 2;
+//	        }
+//	        else if (txt.equals("/fortify"))
+//	        {
+//	        	timer1.cancel();
+//	        	return 3;
+//	        }
+//	   
+//	        return -1;
+//	   }
+//	   
+//
+//	   
+//	   
+//	   
+//	    @Override
+//	    public String getBotUsername() {
+//	        return "MeowChatBot";
+//	    }
+// 
+//	    @Override
+//	    public String getBotToken() {
+//	        //return "718366234:AAHZ64pich1qeITo4J2S8CmauBCfPSqCkQY";
+//	        return "704843018:AAGMDCsXfqVmOF_umFGSdZgJNAMiFyVr0d4";
+//	    }
 
 
 }
