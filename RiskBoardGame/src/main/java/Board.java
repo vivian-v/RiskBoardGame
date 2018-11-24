@@ -19,38 +19,56 @@ import java.util.TimerTask;
 
 
 public class Board extends TelegramLongPollingBot{
-	private static boolean gameReady;
-	private static String gameId;
-	private static int totalNumParticipants;
-	
-	
-	Dice dice = new Dice();
-	UndoManager dd = new UndoManager();
+	private String[] regionNames = {"Africa", "Asia", "Australia", "Euroupe", "North America", "South America"};
+	private String format = "%1$-5s | %2$-20s | %3$-24s | %4$-15s | %5$-11s | \n";
+	boolean gameReady;
+	int totalNumParticipants;
 	private static HashMap<String, Country> Map = new HashMap<String, Country>();
 	private static ArrayList<Player> Players = new ArrayList<Player>();
+    
+	int currentPlayerIndex;
+	int currentActionIndex;
+	
+	
+	
+	
+	
+	
+	int nextplayerIndex;
+    boolean dir;
+    
+    
+    
+    
+    
+	Dice dice = new Dice();
+	UndoManager dd = new UndoManager();
+
 	Deck deck = new Deck();
 	ArrayList<String> s = new ArrayList<String>();
 	boolean checkGameEnd = false;
 	String[] playerNameList;
 	int[] playerConquerList;
 	int numDeadPlayers = 0;
-    private static int nextplayerIndex;
-    private static boolean dir;
+	int gameStatte;
+	
     MyBot mybot = new MyBot();
    
     
 	public Board(HashMap<String, Country> m, ArrayList<Player> p) throws IOException
 	{
 		gameReady = false;
-		gameId = "135789";
-		totalNumParticipants = 1;
+		totalNumParticipants = 0;
+		currentPlayerIndex = 0;
+		currentActionIndex = 0;
 		
 		int playerTurn = 0;
 		String actionStatus;
 		Map = m;
 		Players = p;
 
-		
+		displayMapInfo();
+
 		
 
 
@@ -102,13 +120,6 @@ public class Board extends TelegramLongPollingBot{
 	}
 	public String attack (int attackerIndex, int defenderIndex)
 	{
-//		s.add(Players.get(attackerIndex).getPlayerName() + " starts to attack " + Players.get(defenderIndex).getPlayerName()+ "\n");
-//		botresponse("start attacking");
-
-//		warObserver.addObserver(Players.get(attackerIndex));
-//		warObserver.notifyWarObservers();
-//		warObserver.removeObserver(Players.get(attackerIndex));
-		
 		int[] attackerRolls;
 		int[] defenderRolls;
 		int numAttackerLose = 0;
@@ -253,46 +264,19 @@ public class Board extends TelegramLongPollingBot{
 		this.numDeadPlayers++;
 		return this.numDeadPlayers;
 	}
-	public String armyPlacement(int playerIndex)
+	public String armyPlacement(int playerIndex, String pickedCountry, int num)
 	{
 		s.add(Players.get(playerIndex).getPlayerName() + " starts to army placement\n");
-		//System.out.println("start placing armies");
+		System.out.println("start placing armies");
 	//	botresponse("start placing armies");
 
 
-		int index = 0;
-		int num = 2;
-		String pickedCountry = "Alberta";
 		
-		Map.get(pickedCountry).setOwnerName(Players.get(index).getPlayerName());
-		Map.get(pickedCountry).addNumOfArmy(10);
-		Players.get(playerIndex).loseNumOfTroops(10);
-		Players.get(playerIndex).takeCountry(Map.get(pickedCountry));
-		s.add(Players.get(playerIndex).getPlayerName() + " take " + pickedCountry+ " with " + num + " army" + "\n");
-
-		
-		index++;
-		num = 1;
-		pickedCountry = "Alaska";
-		Map.get(pickedCountry).setOwnerName(Players.get(index).getPlayerName());
+		Map.get(pickedCountry).setOwnerName(Players.get(playerIndex).getPlayerName());
 		Map.get(pickedCountry).addNumOfArmy(num);
 		Players.get(playerIndex).loseNumOfTroops(num);
 		Players.get(playerIndex).takeCountry(Map.get(pickedCountry));
 		s.add(Players.get(playerIndex).getPlayerName() + " take " + pickedCountry+ " with " + num + " army" + "\n");
-//
-//		pickedCountry = "Central America";
-//		Map.get(pickedCountry).setOwnerName(Players.get(index).getPlayerName());
-//		Map.get(pickedCountry).addNumOfArmy(num);
-//		Players.get(playerIndex).loseNumOfTroops(num);
-//		Players.get(playerIndex).takeCountry(Map.get(pickedCountry));
-//		s.add(Players.get(playerIndex).getPlayerName() + " take " + pickedCountry+ " with " + num + " army" + "\n");
-
-		
-		
-		
-		
-		
-		
 		
 		return "army placement action";
 	}
@@ -492,91 +476,119 @@ public class Board extends TelegramLongPollingBot{
 		return true;
 	}
 
+	public void displayMapInfo()
+	{
+		System.out.format(format, "Index", "Region" ,"Country Name", "Land Owner", "Num of Army");
+		int i = 0;
+		System.out.println(Map.size());
+		for (String key : Map.keySet()) {
+		   System.out.format(format, ++i, Map.get(key).getContinentName(),Map.get(key).getCountryName(), Map.get(key).getOwnerName(), Map.get(key).getNumOfArmy());
+
+		}
+
+	
+	}
 	@Override
     public void onUpdateReceived(Update update) {
 
         // We check if the update has a message and the message has text
         if (update.hasMessage() && update.getMessage().hasText()) {
             // Set variables
-            String user_first_name = update.getMessage().getChat().getFirstName();
-            
+            String user_first_name = update.getMessage().getChat().getFirstName();     
             String user_last_name = update.getMessage().getChat().getLastName();
-            
-            String user_username = update.getMessage().getChat().getUserName();
-            
-            long user_id = update.getMessage().getChat().getId();
-            
             String message_text = update.getMessage().getText();
-            
-
+            String answer = null;
             long chat_id = update.getMessage().getChatId();
-            //String answer = "why it doesn't work...";
-            String answer = message_text;
+            boolean validAction = false;
+
+            int x = log(user_first_name, user_last_name, message_text);
+           
+            System.out.println(Players.get(0).getNumOfTroops());
+            if (gameReady)
+            {
+            	if (x == currentActionIndex && Players.get(currentPlayerIndex).getPlayerName().equals(user_first_name))
+            	{
+            		armyPlacement(this.currentPlayerIndex, "Alberta", 2);
+            		currentActionIndex++;
+            		answer = "Done placing army";
+            		validAction = true;
+            	}
+            	else if (x == currentActionIndex && Players.get(currentPlayerIndex).getPlayerName().equals(user_first_name))
+            	{
+            		reinforce(this.currentPlayerIndex);
+            		currentActionIndex++;
+            		answer = "Done reinforcing";
+            		validAction = true;
+
+
+            	}
+            	else if (x == currentActionIndex && Players.get(currentPlayerIndex).getPlayerName().equals(user_first_name))
+            	{
+            		int nextPlayerIndex = (this.currentPlayerIndex == 1) ? 0 : 1;
+            		attack(currentPlayerIndex, nextPlayerIndex);
+
+            		currentActionIndex++;
+            		answer = "Done attacking";
+            		validAction = true;
+
+
+            	}else if (x == currentActionIndex && Players.get(currentPlayerIndex).getPlayerName().equals(user_first_name))
+            	{
+            		fortify(currentPlayerIndex);
+            		currentPlayerIndex = (currentPlayerIndex == 0 ) ? 1 : 0;
+            		currentActionIndex = 0;
+            		answer = "Done fortifying";
+            		validAction = true;
+
+
+            	} else if (x == 4)
+            	{
+    	        	displayMapInfo();
+    	        	answer = "Display Current Map info";
+            		validAction = true;
+
+            	}
+            	 else if (x == 5)
+            	{
+            		answer = "Game Start";
+            		validAction = true;
+            	}
+            } else
+            {
+            	answer = "Not enough players";
+        		validAction = true;
+            }
+
+            if (!validAction)
+            {
+            	answer = "Not your turn or step for the action is not right";
+            	
+            } 
             
             
             SendMessage message = new SendMessage() // Create a message object object
                     .setChatId(chat_id)
                     .setText(answer);
-            
-            
-            int x = log(user_first_name, user_last_name, Long.toString(user_id), message_text, answer);
-           
-            if (gameReady)
-            {
-            	if (x == 0)
-            	armyPlacement(0);
-            else if (x == 1)
-            	reinforce(0);
-            else if (x == 2)
-            	attack(0,1);
-            else if (x == 3)
-            	fortify(0);
+
+	        
+	        try {
+                execute(message); // Sending our message object to user
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
             }
-           
             
             
             
         }
     }
 
-
-	public void botResponse() {
-		
-		String messageFromBot;
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-	}
-	   public void botresponse(String s)
-	   {
-		   String answer = s;
-		    long chat_id = 790551886;
-		    
-		    SendMessage message = new SendMessage() // Create a message object object
-		            .setChatId(chat_id)
-		            .setText(answer);
-		    
-		   try {
-               execute(message); // Sending our message object to user
-           } catch (TelegramApiException e) {
-               e.printStackTrace();
-           }
-	   }
-	   private int log(String first_name, String last_name, String user_id, String txt, String bot_answer) {
+	   private int log(String first_name, String last_name, String txt) {
 	        System.out.println("\n ----------------------------");
-	        System.out.println("Message from " + first_name + " " + last_name + ". (id = " + user_id + ") \n Text - " + txt);
+	        System.out.println("Message from " + first_name + " " + last_name + "\n Text - " + txt);
 
-	        if (txt.equals("/place"))
+
+	        
+	        if (txt.contains("/placearmy"))
 	        {
 	        	return 0;
 	        }	
@@ -590,7 +602,23 @@ public class Board extends TelegramLongPollingBot{
 	        else if (txt.equals("/fortify"))
 	        {
 	        	return 3;
+	        } else if (txt.equals("/map"))
+	        {
+	        	return 4;
+	        } else if (txt.equals("/join") && gameReady != true)
+	        {
+	        	Players.get(totalNumParticipants++).setPlayerName(first_name);
+
+	        	if (totalNumParticipants == 2)
+	        	{
+	        		gameReady = true;
+	        	}
+	        	return 5;
+	        } else if (txt.equals("/myinfo") && gameReady == true)
+	        {
+	        	System.out.println(Players.get(0).getPlayerName());
 	        }
+
 	   
 	        return -1;
 	   }
