@@ -14,7 +14,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class Board extends TelegramLongPollingBot{
-	private String[] regionNames = {"Africa", "Asia", "Australia", "Euroupe", "North America", "South America"};
+	//private String[] regionNames = {"Africa", "Asia", "Australia", "Euroupe", "North America", "South America"};
 	private String format = "%1$-5s | %2$-20s | %3$-24s | %4$-15s | %5$-11s | \n";
 	private static HashMap<String, Country> Map = new HashMap<String, Country>();
 
@@ -24,6 +24,7 @@ public class Board extends TelegramLongPollingBot{
 	int numTroops;
 	int currentPlayerIndex;
 	int numDeadPlayers;
+	int currentActionIndex;
 	boolean gameStart;
 	boolean placeStart;
 	String gameID; //game id for a game
@@ -46,6 +47,7 @@ public class Board extends TelegramLongPollingBot{
 		this.currentPlayerIndex = 0;
 		this.Map = m;
 		this.numDeadPlayers = 0;
+		this.currentActionIndex = 0;
 		
 		for (String value : Map.keySet())
 		{
@@ -133,7 +135,8 @@ public class Board extends TelegramLongPollingBot{
 				if (players.get(i).getPlayerName().equals(userName))
 					return "My Name : " + players.get(i).getPlayerName() + "\nMy Number of Troops : " 
 						+ players.get(i).getNumOfTroops() + "\nMy Number of Conquered Countries : " 
-						+ players.get(i).getNumConquered();  
+						+ players.get(i).getNumConquered() + "\nMy Number of Owned Countries : "
+						+ players.get(i).getOwnedCountries().size();  
 			}
 			
 			return "Failed to show info";
@@ -149,7 +152,7 @@ public class Board extends TelegramLongPollingBot{
 		} else if (txt.equals("=mapinfo"))
 		{
 			this.displayMapInfo();
-		} else if (txt.contains("=attack"))
+		} else if (txt.contains("=attack") && this.currentActionIndex == 0)
 		{
 			if (tokens.length < 3 )
 				return "invalid input";	
@@ -158,9 +161,34 @@ public class Board extends TelegramLongPollingBot{
 			if (currentPlayerIndex != getPlayerIndex(userName))
 				return "Not your turn. Current Turn : " + players.get(currentPlayerIndex).getPlayerName();
 			
+			botResponseToAll(attack(currentPlayerIndex, tokens[1], tokens[2]));
+		} else if (txt.contains("=showattackable"))
+		{
+			if (tokens.length < 2 )
+				return "invalid input";
 			
+			return showAttackableCountry(userName, tokens[1]);
 			
-			return attack(currentPlayerIndex, tokens[1], tokens[2]);
+		} else if (txt.equals("=doneaction")) {
+			if (!gameStart || openGameNum == 0)
+				return "Game hasn't started yet";
+			if (currentPlayerIndex != getPlayerIndex(userName))
+				return "Not your turn. Current Turn : " + players.get(currentPlayerIndex).getPlayerName();
+			
+			if (this.currentActionIndex == 2)
+			{
+				this.currentActionIndex = 0;
+				String cpname = players.get(currentPlayerIndex).getPlayerName();
+				String npname = (currentPlayerIndex == this.numOfPlayers) ? players.get(0).getPlayerName() : players.get(currentPlayerIndex + 1).getPlayerName();
+				botResponseToAll(cpname + "'s turn is over\n" + "Now, " + npname + "'s turn");
+			} else
+			{
+				this.currentActionIndex++;
+				if (this.currentActionIndex == 1)
+					return "Now action : attack";
+				else 
+					return "Now action : fortify";
+			}
 			
 		}
 		
@@ -196,7 +224,9 @@ public class Board extends TelegramLongPollingBot{
 				+ "=showallplayers\n"
 				+ "=myinfo\n"
 				+ "=placement\n"
-				+ "=mapinfo\n";
+				+ "=mapinfo\n"
+				+ "=showattackable [countryName]"
+				+ "=doneaction";
 
 				
 		return tempStr;
@@ -204,8 +234,7 @@ public class Board extends TelegramLongPollingBot{
 	}
 	public String attack (int attackerIndex, String aCountry, String dCountry)
 	{
-
-		
+		String warInfo = "";
 		int[] attackerRolls;
 		int[] defenderRolls;
 		int numAttackerLose = 0;
@@ -214,7 +243,7 @@ public class Board extends TelegramLongPollingBot{
 		Country attackerCountry = getCountry(aCountry);
 		Country defenderCountry = getCountry(dCountry);
 		
-		int defenderIndex = getDefenderIndex(dCountry);
+		int defenderIndex = getPlayerIndexFromCountry(dCountry);
 		
 		if (attackerIndex == defenderIndex)
 			return "You can't attack your country";
@@ -255,26 +284,16 @@ public class Board extends TelegramLongPollingBot{
 				if (players.get(defenderIndex).getOwnedCountries().size() == 0)
 					killPlayer(defenderIndex);
 				
-//				if (gameOver())
-//				{
-//					checkGameEnd = true;
-//					updateGameInfo();
-//					postGameInfo();
-//
-//				} else 
-//				{
-//					updateGameInfo();
-//					postGameInfo();
-//				}
 			}
 	
 		} else
 		{
 			return "You can't attack this country";
 		}
-
 		
-		return "Done attacking";
+		warInfo = players.get(attackerIndex).getPlayerName()+" Lost : " + numAttackerLose + "\n" + players.get(defenderIndex).getPlayerName() + " Lost : " + numAttackerLose; 
+		
+		return warInfo;
 		
 	}
 	public int killPlayer(int playerIndex)
@@ -299,6 +318,34 @@ public class Board extends TelegramLongPollingBot{
 		
 		return true;
 	}
+	public String showAttackableCountry(String name, String country)
+	{
+		ArrayList<String> connection;
+		String playerName = name;
+		String countryLists = "Here is/are the lists\n";
+
+		if (!Map.containsKey(country))
+			return "Invalid Country Name";
+		if (!Map.get(country).getOwnerName().equals(playerName))
+			return "This country is not your country";
+		if (Map.get(country).getNumOfArmy() < 2)
+			return "Not enough army in the country";
+		
+		connection = Map.get(country).getAdjacency();
+		
+		if (connection.size() == 0)
+			return "There is no country you can attack";
+		
+		for (int i = 0; i < connection.size(); i++)
+		{
+			if (!Map.get(connection.get(i)).getOwnerName().equals(playerName))
+				countryLists += Map.get(connection.get(i)).getCountryName() + " : " + Map.get(connection.get(i)).getNumOfArmy() + "\n";
+		}
+
+		
+		return countryLists;
+		
+	}
 	public boolean isAttackable(Country c1, Country c2)
 	{
 		if (!c1.getAdjacency().contains(c2.getCountryName()) || c1.getOwnerName().equals(c2.getOwnerName()) || c1.getNumOfArmy() < 2)
@@ -313,10 +360,9 @@ public class Board extends TelegramLongPollingBot{
 		Country fc = Map.get(s);
 		return fc;
 	}
-	public int getDefenderIndex(String c)
+	public int getPlayerIndexFromCountry(String c)
 	{
 		String name = Map.get(c).getOwnerName();
-		System.out.println(name);	
 		return getIndex(name);
 	}
 	public int getPlayerIndex(String name)
@@ -334,22 +380,45 @@ public class Board extends TelegramLongPollingBot{
 	}
 	public String armyPlacement()
 	{
+		boolean firstRound = false;
 		int playerIndex = 0;
 		String pickedCountry;
 		int i = 0;
 		while (players.get(this.numOfPlayers - 1).getNumOfTroops()> 0)
 		{
-			pickedCountry = this.mapKeySets.get(i);
-			Map.get(pickedCountry).setOwnerName(players.get(playerIndex).getPlayerName());
-			Map.get(pickedCountry).addNumOfArmy(1);
-			players.get(playerIndex).loseNumOfTroops(1);
-			players.get(playerIndex).takeCountry(Map.get(pickedCountry));
-			playerIndex++;
-			if (playerIndex == this.numOfPlayers)
-				playerIndex = 0;
-			i++;
-			if (i == this.mapKeySets.size())
-				i = 0;
+			if (!firstRound)
+			{
+				pickedCountry = this.mapKeySets.get(i);
+				Map.get(pickedCountry).setOwnerName(players.get(playerIndex).getPlayerName());
+				Map.get(pickedCountry).addNumOfArmy(1);
+				players.get(playerIndex).loseNumOfTroops(1);
+				players.get(playerIndex).takeCountry(Map.get(pickedCountry));
+				playerIndex++;
+				if (playerIndex == this.numOfPlayers)
+					playerIndex = 0;
+				i++;
+				if (i == this.mapKeySets.size())
+				{	
+					i = 0;
+					firstRound = true;
+				}
+			} else
+			{
+				pickedCountry = this.mapKeySets.get(i);
+				if (Map.get(pickedCountry).getOwnerName().equals(players.get(playerIndex).getPlayerName()))
+				{
+					Map.get(pickedCountry).addNumOfArmy(1);
+					players.get(playerIndex).loseNumOfTroops(1);
+					playerIndex++;
+					if (playerIndex == this.numOfPlayers)
+						playerIndex = 0;
+					i++;
+					if (i == this.mapKeySets.size())
+					{	
+						i = 0;
+					}
+				}
+			}
 		}
 
 		return "Done army placement";
@@ -359,7 +428,6 @@ public class Board extends TelegramLongPollingBot{
 	{
 		System.out.format(format, "Index", "Region" ,"Country Name", "Land Owner", "Num of Army");
 		int i = 0;
-		System.out.println(Map.size());
 		for (String key : Map.keySet()) {
 		   System.out.format(format, ++i, Map.get(key).getContinentName(),Map.get(key).getCountryName(), Map.get(key).getOwnerName(), Map.get(key).getNumOfArmy());
 		}
