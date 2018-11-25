@@ -1,10 +1,8 @@
 package riskboardgame;
 
-
 public class Card {
 	private String detail;
 	private String type;
-
 
 	public Card(String detail, String t){
 		this.detail = detail;
