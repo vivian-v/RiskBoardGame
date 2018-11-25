@@ -14,11 +14,11 @@ public class History {
 	
 	public History(String action, ArrayList<Player> p, HashMap<String, Country> m, int index, Deck d, int setIndex)
 	{
-		this.actionStatus = new String(action);
-		this.prevPlayers = new ArrayList<Player>(p);
-		this.prevMap = new HashMap<String, Country>(m);
+		this.actionStatus = action;
+		this.prevPlayers = p;
+		this.prevMap = m;
 		this.prevPlayerIndex = index;
-		this.prevDeck = new Deck(d);
+		this.prevDeck = d;
 		this.prevTradeSetIndex = setIndex;
 	}
 	public String getActionStatus()
