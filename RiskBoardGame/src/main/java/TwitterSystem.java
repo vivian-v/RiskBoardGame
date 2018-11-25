@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Properties;
 
 
-public class Twitter4J {
+public class TwitterSystem {
 	
 	Properties prop = new Properties();
 	InputStream input = null;
@@ -67,7 +67,7 @@ public class Twitter4J {
 	public void postTweet(String str)
 	{
 	   try {
-			Status status = twitter.updateStatus(str);
+			twitter.updateStatus(str);
 		} catch (TwitterException e) {
 			e.printStackTrace();
 		}

@@ -11,33 +11,27 @@ import org.apache.http.HttpEntity;
 public class Risk {
 
 	public static void main(String[] args) {
-		
+		Setup setup = new Setup();
+
 		ApiContextInitializer.init();
         TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
         try {
-            telegramBotsApi.registerBot(new Board());
+            telegramBotsApi.registerBot(new Board(setup.LoadMap()));
 
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
 		
-        
-        
-        
-        
-        
-		Setup setup = new Setup();
-		try {
-			Board riskBoard = new Board(setup.LoadMap(), setup.setupPlayer(2));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		
-		//ReplayS3 replay = new ReplayS3();
+//		new Board();
 
-		//replay.listBuckets();
-
-	//	Twitter4J tw = new Twitter4J();
+//		try {
+//			new Board();
+//
+//			new Board(setup.LoadMap(), setup.setupPlayer(2));
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 		
 	}
 
