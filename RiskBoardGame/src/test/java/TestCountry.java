@@ -2,7 +2,6 @@
 
 
 
-import org.junit.Before;
 import org.junit.Test;
 import junit.framework.TestCase;
 import riskboardgame.Country;
@@ -11,11 +10,7 @@ import riskboardgame.Country;
 public class TestCountry extends TestCase {
 
 	Country test = new Country("China");
-//	@Before
-//	public void setup()
-//	{
-//		test.setContinentName("Asia");
-//	}
+
     @Test
     public void testSetCountryInfo()
     {
