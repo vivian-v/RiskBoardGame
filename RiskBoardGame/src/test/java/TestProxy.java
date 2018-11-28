@@ -4,8 +4,6 @@
 
 import org.junit.Test;
 import junit.framework.TestCase;
-import riskboardgame.Card;
-import riskboardgame.Deck;
 import riskboardgame.Proxy;
 import riskboardgame.Transaction;
 
@@ -33,9 +31,18 @@ public class TestProxy extends TestCase {
     }
     @Test 
     public void testGetCredit() {
-    	assertEquals(20, player.transferCredit());
+    	assertEquals(20, player.getCredit());
     }
 
+    @Test
+    public void testProxy()
+    {
+    	Proxy test = new Proxy(20);
+    	test.getCredit();
+    	test.buyCards();
+    	test.buyUndoActions();
+    	test.transferCredit();
+    }
 	
 
 }
