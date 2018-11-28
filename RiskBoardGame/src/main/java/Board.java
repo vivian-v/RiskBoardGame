@@ -200,3 +200,29 @@ public class Board extends TelegramLongPollingBot{
 	{
 		return this.botStart;
 	}
+	public String reinforce(int playerIndex)
+	{
+		int totalTroops = 0;
+		int troopsByTerritory = 0;
+		int troopsByRegion = 0;
+
+		int[] fullRegion = {6, 12, 4, 7, 9, 4};
+		int[] bonusByRegion = {3, 7, 4, 5, 5, 2};
+		int[] countriesByRegions = players.get(playerIndex).getCountriesOwnedByRegions();
+		
+		troopsByTerritory = players.get(playerIndex).getOwnedCountries().size() / 3;
+
+		for (int i = 0; i < fullRegion.length; i++)
+		{
+			if (countriesByRegions[i] == fullRegion[i])
+			{
+				troopsByRegion += bonusByRegion[i];
+			}
+		}
+	
+		totalTroops = troopsByTerritory + troopsByRegion;
+		
+		
+		players.get(playerIndex).addNumOfTroops(totalTroops);
+		return "reinforce action";
+	}
