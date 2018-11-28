@@ -146,3 +146,41 @@ public class Board extends TelegramLongPollingBot{
 	{
 		this.numDeadPlayers++;
 	}
+	public int getNumDeadPlayer()
+	{
+		return this.numDeadPlayers;
+	}
+	public void increaseCurrentActionIndex()
+	{
+		if (this.currentActionIndex == 2)
+			this.currentActionIndex = 0;
+		else
+			this.currentActionIndex++;
+	}
+	public int getCurrentActionIndex() {
+		return this.currentActionIndex;
+	}
+	public void setGameStart(boolean b)
+	{
+		this.gameStart = b;
+	}
+	public boolean getGameStart()
+	{
+		return this.gameStart;
+	}
+	public void setPlaceStart(boolean b)
+	{
+		this.placeStart = b;
+	}
+	public boolean getPlaceStart()
+	{
+		return this.placeStart;
+	}
+	public void setDetermineTurnsStart(boolean b)
+	{
+		this.determineTurnsStart = b;
+	}
+	public boolean getDetermineTurnsStart()
+	{
+		return this.determineTurnsStart;
+	}
