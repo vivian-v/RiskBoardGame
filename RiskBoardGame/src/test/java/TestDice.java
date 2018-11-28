@@ -34,7 +34,7 @@ public class TestDice extends TestCase {
 	{
 		assertEquals(3, test.maxNumDice("Attacker", 4));
 		assertEquals(2, test.maxNumDice("Defender", 4));
-
+		assertEquals(2, test.maxNumDice("Attacker", 3));
 	}
 
 }
