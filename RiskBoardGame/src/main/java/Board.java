@@ -184,3 +184,19 @@ public class Board extends TelegramLongPollingBot{
 	{
 		return this.determineTurnsStart;
 	}
+	public void setGameID(String id)
+	{
+		this.gameID = id;
+	}
+	public String getGameID()
+	{
+		return this.gameID;
+	}
+	public void setBotStart(boolean b)
+	{
+		this.botStart = b;
+	}
+	public boolean getBotStart()
+	{
+		return this.botStart;
+	}
