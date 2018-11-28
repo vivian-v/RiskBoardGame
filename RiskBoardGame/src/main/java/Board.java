@@ -126,3 +126,23 @@ public class Board extends TelegramLongPollingBot{
 	{
 		this.numParticipants++;
 	}
+	public void setNumTroops(int n)
+	{
+		this.numTroops = n;
+	}
+	public int getNumTroops()
+	{
+		return this.numTroops;
+	}
+	public void increaseCurrentPlayerIndex()
+	{
+		this.currentPlayerIndex++;
+	}
+	public int getCurrentPlayerIndex()
+	{
+		return this.currentPlayerIndex;
+	}
+	public void increaseNumDeadPlayer()
+	{
+		this.numDeadPlayers++;
+	}
