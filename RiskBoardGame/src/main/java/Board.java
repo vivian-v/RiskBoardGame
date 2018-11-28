@@ -226,3 +226,48 @@ public class Board extends TelegramLongPollingBot{
 		players.get(playerIndex).addNumOfTroops(totalTroops);
 		return "reinforce action";
 	}
+	public int tradeInCard(int playerIndex)
+	{
+		int idx = 0;
+		int[] bonusNumber = {0,4,6,8,10,12,15,20,25};
+
+		ArrayList<Card> cardHeld = players.get(playerIndex).getAllCards();
+		
+		if (cardHeld.size() == 0)
+			return 0;
+		else if (cardHeld.size() > 2)
+		{
+			String[] pickedCards = new String[3];
+			String[] pickedCountry = new String[3];
+			int[] pickedIndex = new int[3];
+			
+			pickedCards[0] = cardHeld.get(0).getType();
+			pickedCards[1] =  cardHeld.get(1).getType();
+			pickedCards[2] =  cardHeld.get(2).getType();
+			
+			pickedCountry[0] = cardHeld.get(0).getDetail();
+			pickedCountry[1] = cardHeld.get(1).getDetail();
+			pickedCountry[2] = cardHeld.get(2).getDetail();
+
+			
+			pickedIndex[0] = 0;
+			pickedIndex[1] = 1;
+			pickedIndex[2] = 2;
+			
+			if (isTradable(pickedCards))
+			{
+				int bonusByCountry = checkCountryInCardsOwned(playerIndex,pickedCountry);
+				idx = players.get(playerIndex).getTradeSetIndex();
+				players.get(playerIndex).setCards(afterTrade(cardHeld, pickedIndex));
+
+				if (idx < 9)
+					return bonusNumber[idx] + bonusByCountry;
+				else 
+					return 25 + ((idx - 8) * 5) + bonusByCountry;	
+			}
+			
+		}
+		
+
+		return 0;
+	}
