@@ -1,4 +1,5 @@
 package riskboardgame;
+
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -12,6 +13,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Properties;
 
@@ -23,19 +26,19 @@ public class TwitterSystem {
 	String[] credentialData = new String[4];
 	Twitter twitter;
     User user;
+    Dictionary<String, String> credentialKeys = new Hashtable<String, String>();
 
 
-
-	public String[] getKeysNTokens()
+	public Dictionary<String, String> getKeysNTokens(String propName)
 	{
 		try {
-    		input = new FileInputStream("secret_MeowCat.properties");
+    		input = new FileInputStream(propName);
     		prop.load(input);
 
-    		credentialData[0] = prop.getProperty("oauth.consumerKey");
-    		credentialData[1] = prop.getProperty("oauth.consumerSecret");
-    		credentialData[2] = prop.getProperty("oauth.accessToken");
-    		credentialData[3] = prop.getProperty("oauth.accessTokenSecret");
+    		credentialKeys.put("oauth.consumerKey", prop.getProperty("oauth.consumerKey"));
+    		credentialKeys.put("oauth.consumerSecret", prop.getProperty("oauth.consumerSecret"));
+    		credentialKeys.put("oauth.accessToken", prop.getProperty("oauth.accessToken"));
+    		credentialKeys.put("oauth.accessTokenSecret", prop.getProperty("oauth.accessTokenSecret"));
 
     	} catch (IOException ex) {
     		ex.printStackTrace();
@@ -49,13 +52,14 @@ public class TwitterSystem {
     		}
     	}
 
-		return credentialData;
+		return credentialKeys;
 	}
-	public void connectTwitter(String[] cre)
+	public void connectTwitter(Dictionary<String, String> cre)
 	{
 		twitter = TwitterFactory.getSingleton();
-        twitter.setOAuthConsumer(cre[0], cre[1]);
-		AccessToken accesstoken = new AccessToken(cre[2], cre[3]);
+		
+        twitter.setOAuthConsumer(cre.get("oauth.consumerKey"), cre.get("oauth.consumerSecret"));
+		AccessToken accesstoken = new AccessToken(cre.get("oauth.accessToken"), cre.get("oauth.accessTokenSecret"));
         twitter.setOAuthAccessToken(accesstoken);
         try {
 			user = twitter.verifyCredentials();
