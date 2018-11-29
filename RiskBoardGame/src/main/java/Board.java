@@ -487,3 +487,9 @@ public class Board extends TelegramLongPollingBot{
 		return warInfo;
 		
 	}
+	public int killPlayer(int playerIndex)
+	{
+		players.get(playerIndex).killPlayer();
+		this.numDeadPlayers++;
+		return this.numDeadPlayers;
+	}
