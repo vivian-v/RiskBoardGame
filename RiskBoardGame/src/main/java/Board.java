@@ -321,6 +321,8 @@ public class Board extends TelegramLongPollingBot{
 					
 		return tempCardHeld; 
 	}
+
+
 	public int checkCountryInCardsOwned(int playerIndex,String[] pickedCountry)
 	{
 		
@@ -367,6 +369,7 @@ public class Board extends TelegramLongPollingBot{
 		}
 		return true;
 	}
+
 	public boolean botResponseToAll(String str)
 	{
 		if (this.botStart == true) {
@@ -386,6 +389,7 @@ public class Board extends TelegramLongPollingBot{
 		}
 		return false;
 	}
+	
 	
 	public String showAllCommands()
 	{
@@ -411,4 +415,11 @@ public class Board extends TelegramLongPollingBot{
 				
 		return tempStr;
 		
+	}
+	public boolean determineTurns()
+	{
+		if (players.size() == 0)
+			return false;
+		Collections.shuffle(players);
+		return true;
 	}
