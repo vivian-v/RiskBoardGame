@@ -1,8 +1,8 @@
 # RiskBoardGame
 
-Tag the project as “final”
-Increase the line coverage of the test cases to at least 80% 
-Refactor, refactor, refactor: Ask yourself:  can you implement classes with fewer fields? Can the number of method arguments be smaller? Have you designed any Exception specific to your project (e.g. InvalidMoveExeption)? 
+Tag the project as “final”  
+Increase the line coverage of the test cases to at least 80%   
+Refactor, refactor, refactor: Ask yourself:  can you implement classes with fewer fields? Can the number of method arguments be smaller?   Have you designed any Exception specific to your project (e.g. InvalidMoveExeption)?  
 
 
 
