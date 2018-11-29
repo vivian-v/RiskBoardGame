@@ -423,3 +423,67 @@ public class Board extends TelegramLongPollingBot{
 		Collections.shuffle(players);
 		return true;
 	}
+	public String attack (int attackerIndex, String aCountry, String dCountry)
+	{
+		String warInfo = "";
+		int[] attackerRolls;
+		int[] defenderRolls;
+		int numAttackerLose = 0;
+		int numDefenderLose = 0;
+		
+		Country attackerCountry = getCountry(aCountry);
+		Country defenderCountry = getCountry(dCountry);
+		
+		int defenderIndex = getPlayerIndexFromCountry(dCountry);
+		
+//		if (attackerIndex == defenderIndex)
+//			return "You can't attack your country";
+
+		attackerRolls = dice.roll(dice.maxNumDice("Attacker", attackerCountry.getNumOfArmy()));
+		defenderRolls = dice.roll(dice.maxNumDice("Defender", defenderCountry.getNumOfArmy()));
+
+		if (isAttackable(attackerCountry, defenderCountry))
+		{
+			if (attackerRolls[attackerRolls.length - 1] > defenderRolls[defenderRolls.length - 1])
+			{
+				numDefenderLose++;
+				
+			} else if (attackerRolls[attackerRolls.length - 1] <= defenderRolls[defenderRolls.length - 1])
+			{
+				numAttackerLose++;
+			}
+		
+			if (attackerRolls.length > 1 && defenderRolls.length > 1)
+			{
+				if (attackerRolls[attackerRolls.length - 2] > defenderRolls[defenderRolls.length - 2])
+				{
+					numDefenderLose++;
+				} else if (attackerRolls[attackerRolls.length - 2] <= defenderRolls[defenderRolls.length - 2])
+				{	
+					numAttackerLose++;
+				}
+			}
+
+			Map.get(attackerCountry.getCountryName()).loseNumOfArmy(numAttackerLose);
+			Map.get(defenderCountry.getCountryName()).loseNumOfArmy(numDefenderLose);
+			
+			if (Map.get(defenderCountry.getCountryName()).getNumOfArmy() < 1)
+			{
+				transferOwnership(attackerCountry.getCountryName(), attackerIndex,defenderCountry.getCountryName(), defenderIndex);
+
+				
+				if (players.get(defenderIndex).getOwnedCountries().size() == 0)
+					killPlayer(defenderIndex);
+				
+			}
+	
+		} else
+		{
+			return "You can't attack this country";
+		}
+		
+		warInfo = players.get(attackerIndex).getPlayerName()+" Lost : " + numAttackerLose + "\n" + players.get(defenderIndex).getPlayerName() + " Lost : " + numAttackerLose; 
+		
+		return warInfo;
+		
+	}
