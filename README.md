@@ -7,5 +7,5 @@ Tag your program as v.05
 
 
 
-[![Build Status](https://travis-ci.com/vivian-v/RiskBoardGame.svg?branch=master)](https://travis-ci.com/vivian-v/RiskBoardGame)
+[![Build Status](https://travis-ci.org/changjin86/aassdf111.svg?branch=master)](https://travis-ci.org/changjin86/aassdf111)
 [![codecov](https://codecov.io/gh/changjin86/aassdf111/branch/master/graph/badge.svg)](https://codecov.io/gh/changjin86/aassdf111)
