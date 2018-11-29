@@ -387,3 +387,28 @@ public class Board extends TelegramLongPollingBot{
 		return false;
 	}
 	
+	public String showAllCommands()
+	{
+		String tempStr = "Lists of Commands\n"
+				+ "=creategame [number of Player] [gameid]\n"
+				+ "=showgameid\n"
+				+ "=join [gameid]\n"
+				+ "=determineturns\n"
+				+ "=showturns"
+				+ "=showallplayers\n"
+				+ "=myinfo\n"
+				+ "=placement\n"
+				+ "=mapinfo\n"
+				+ "=showcurrentaction\n"
+				+ "=showattackable [countryName]\n"
+				+ "=showfortifiable [countryName]\n"
+				+ "=reinforce\n"
+				+ "=attack [fromCountry] [toCountry]\n"
+				+ "=fortify [fromCountry] [toCountry] [numArmy]\n"
+				+ "=doneaction\n";
+		
+				
+				
+		return tempStr;
+		
+	}
