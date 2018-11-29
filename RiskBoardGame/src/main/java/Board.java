@@ -367,3 +367,23 @@ public class Board extends TelegramLongPollingBot{
 		}
 		return true;
 	}
+	public boolean botResponseToAll(String str)
+	{
+		if (this.botStart == true) {
+		for (int i = 0; i < this.numOfPlayers; i++)
+		{
+			SendMessage message = new SendMessage() 
+		            .setChatId(players.get(i).getUserId())
+                    .setText(str);
+			
+			try {
+                execute(message); // Sending our message object to user
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+                return false;
+            }
+		}
+		}
+		return false;
+	}
+	
