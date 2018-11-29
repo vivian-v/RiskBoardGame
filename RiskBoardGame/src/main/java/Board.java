@@ -309,3 +309,15 @@ public class Board extends TelegramLongPollingBot{
 			return false;
 
 	}
+	public ArrayList<Card> afterTrade(ArrayList<Card> c, int[] pickedIndex)
+	{
+		ArrayList<Card> tempCardHeld = new ArrayList<Card>();
+		
+		for (int i = 0; i < c.size(); i++)
+		{
+			if (i != pickedIndex[0] && i != pickedIndex[1] && i != pickedIndex[2])
+			tempCardHeld.add(new Card(c.get(i).getDetail(), c.get(i).getType()));
+		}
+					
+		return tempCardHeld; 
+	}
