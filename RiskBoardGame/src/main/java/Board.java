@@ -507,3 +507,36 @@ public class Board extends TelegramLongPollingBot{
 
 		return true;
 	}
+	public String showCountryValidation(String name, String country, int dir)
+	{
+		ArrayList<String> connection;
+		String countryLists = "Here is/are the lists\n";
+
+		int x = checkAttackableOrFortifiable(name, country);
+		
+		if (x == -1)
+			return "Invalid Country Name";
+		if (x == -2)
+			return "This country is not your country";
+		if (x == -3)
+			return "Not enough army in the country";
+		
+		connection = Map.get(country).getAdjacency();
+		
+		if (connection.size() == 0)
+			return "There is no country you can attack";
+		
+		for (int i = 0; i < connection.size(); i++)
+		{
+			if (dir == 1) {
+				if (!Map.get(connection.get(i)).getOwnerName().equals(name))
+					countryLists += Map.get(connection.get(i)).getCountryName() + " : " + Map.get(connection.get(i)).getNumOfArmy() + "\n";
+			} else if (dir == 2)
+			{
+				if (Map.get(connection.get(i)).getOwnerName().equals(name))
+					countryLists += Map.get(connection.get(i)).getCountryName() + " : " + Map.get(connection.get(i)).getNumOfArmy() + "\n";
+			}
+		}
+
+		return countryLists;
+	}
