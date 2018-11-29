@@ -321,3 +321,20 @@ public class Board extends TelegramLongPollingBot{
 					
 		return tempCardHeld; 
 	}
+	public int checkCountryInCardsOwned(int playerIndex,String[] pickedCountry)
+	{
+		
+		ArrayList<String> countryLists = new ArrayList<String>();
+		ArrayList<Country> OwnedCountry = players.get(playerIndex).getOwnedCountries();
+		
+		for (int i = 0; i < OwnedCountry.size(); i++)
+		{
+			countryLists.add(OwnedCountry.get(i).getCountryName());
+		}
+		
+		if (countryLists.contains(pickedCountry[0]) || countryLists.contains(pickedCountry[1]) || countryLists.contains(pickedCountry[2]))
+			return 2;
+		else 
+			return 0;
+		
+	}
