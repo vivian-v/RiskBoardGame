@@ -493,3 +493,17 @@ public class Board extends TelegramLongPollingBot{
 		this.numDeadPlayers++;
 		return this.numDeadPlayers;
 	}
+	public boolean transferOwnership(String attackerCountry, int attackerIndex,String defenderCountry, int defenderIndex)
+	{
+		if (attackerCountry == defenderCountry)
+			return false;
+		Map.get(defenderCountry).setOwnerName((Map.get(attackerCountry).getOwnerName()));
+		Map.get(defenderCountry).addNumOfArmy(1);
+		Map.get(attackerCountry).loseNumOfArmy(1);
+		
+		players.get(attackerIndex).takeCountry(Map.get(defenderCountry));
+		players.get(attackerIndex).increaseNumConquered();
+		players.get(defenderIndex).loseCountry(Map.get(defenderCountry));
+
+		return true;
+	}
