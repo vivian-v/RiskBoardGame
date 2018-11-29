@@ -338,3 +338,24 @@ public class Board extends TelegramLongPollingBot{
 			return 0;
 		
 	}
+	public String fortify(int playerIndex, String c1, String c2, int numTransferArmy)
+	{
+		Country fromCountry = getCountry(c1);
+		Country toCountry = getCountry(c2);
+		
+		if (players.get(playerIndex).getNumOfTroops() < numTransferArmy)
+			return "You don't have enough army";
+		
+		
+		if (isFortifiable(fromCountry, toCountry))
+		{
+			Map.get(fromCountry.getCountryName()).loseNumOfArmy(numTransferArmy);
+			Map.get(toCountry.getCountryName()).addNumOfArmy(numTransferArmy);
+		} else
+		{
+			return "You can't fortify";
+		}
+		
+
+		return "fortify action";
+	}
