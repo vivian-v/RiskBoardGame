@@ -29,6 +29,7 @@ public class Board extends TelegramLongPollingBot{
 	boolean gameStart;
 	boolean placeStart;
 	boolean determineTurnsStart;
+	String lastAction;
 	String gameID; //game id for a game
 	ArrayList<Player> players = new ArrayList<Player>();
 	ArrayList<String> mapKeySets = new ArrayList<String>();
@@ -52,6 +53,7 @@ public class Board extends TelegramLongPollingBot{
 		this.Map = m;
 		this.botStart = true;
 		this.deck = d;
+		this.lastAction = "";
 		tradeNumLists.add(3);
 		tradeNumLists.add(30);
 		tradeNumLists.add(300);
@@ -270,4 +272,40 @@ public class Board extends TelegramLongPollingBot{
 		
 
 		return 0;
+	}
+	public boolean isTradable(String[] c)
+	{
+		ArrayList<Integer> numLists = new ArrayList<Integer>();
+		int total = 0;
+		
+		numLists.add(3);
+		numLists.add(30);
+		numLists.add(300);
+		numLists.add(111);
+		numLists.add(1011);
+		numLists.add(1101);
+		numLists.add(1110);
+		numLists.add(2001);
+		numLists.add(2010);
+		numLists.add(2100);
+
+		for (int i = 0; i < c.length; i++)
+		{
+			if (c[i].equals("solider"))
+				total += 1;
+			else if (c[i].equals("horse"))
+				total += 10;
+			else if (c[i].equals("cannon"))
+				total += 100;
+			else if (c[i].equals("wild"))
+				total += 1000;
+		}
+		
+		if (numLists.contains(total))
+		{
+			return true;
+		}
+		else 
+			return false;
+
 	}
