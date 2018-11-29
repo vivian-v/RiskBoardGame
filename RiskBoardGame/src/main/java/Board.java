@@ -359,3 +359,11 @@ public class Board extends TelegramLongPollingBot{
 
 		return "fortify action";
 	}
+	public boolean isFortifiable(Country c1, Country c2)
+	{
+		if (!c1.getOwnerName().equals(c2.getOwnerName()) || c1.getNumOfArmy() < 2 && !c1.getAdjacency().contains(c2.getCountryName()))
+		{
+			return false;
+		}
+		return true;
+	}
