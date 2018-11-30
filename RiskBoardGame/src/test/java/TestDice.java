@@ -1,6 +1,3 @@
-
-
-
 import org.junit.Test;
 import junit.framework.TestCase;
 import riskboardgame.Dice;
