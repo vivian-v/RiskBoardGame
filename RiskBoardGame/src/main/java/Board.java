@@ -540,3 +540,15 @@ public class Board extends TelegramLongPollingBot{
 
 		return countryLists;
 	}
+	public int checkAttackableOrFortifiable(String name, String country)
+	{
+		if (!Map.containsKey(country))
+			return -1;
+		if (!Map.get(country).getOwnerName().equals(name))
+			return -2;
+		if (Map.get(country).getNumOfArmy() < 2)
+			return -3;
+		
+		
+		return 1;
+	}
