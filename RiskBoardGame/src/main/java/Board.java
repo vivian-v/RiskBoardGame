@@ -50,9 +50,9 @@ public class Board extends TelegramLongPollingBot{
 		this.currentPlayerIndex = 0;
 		this.numDeadPlayers = 0;
 		this.currentActionIndex = 0;
-		this.Map = m;
+		Board.Map = m;
 		this.botStart = true;
-		this.deck = d;
+		Board.deck = d;
 		this.lastAction = "";
 		tradeNumLists.add(3);
 		tradeNumLists.add(30);
