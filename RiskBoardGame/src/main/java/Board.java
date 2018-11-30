@@ -75,9 +75,7 @@ public class Board extends TelegramLongPollingBot{
 	public Board() {
 		// TODO Auto-generated constructor stub
 	}
-	public static int testGenerator()	{
-		Map = new Setup().LoadMap();
-		deck = new Setup().LoadDeck();
+	public int testGenerator()	{
 		Player np1 = new Player("test1", 1234, 50);
 		Player np2 = new Player("test2", 1234, 50);
 		Country cn1 = new Country("China");
