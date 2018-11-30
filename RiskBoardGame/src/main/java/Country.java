@@ -52,7 +52,7 @@ public class Country   {
 	public void addNumOfArmy(int n) {
 		this.numOfArmy += n;
 	}
-	public void loseNumOfArmy(int n)	{
+	public void loseNumOfArmy(int n) {
 		this.numOfArmy -= n;
 	}
 
