@@ -552,3 +552,12 @@ public class Board extends TelegramLongPollingBot{
 		
 		return 1;
 	}
+	public boolean isAttackable(Country c1, Country c2)
+	{
+		if (!c1.getAdjacency().contains(c2.getCountryName()) || c1.getOwnerName().equals(c2.getOwnerName()) || c1.getNumOfArmy() < 2)
+		{
+			return false;
+		}
+
+		return true;	
+	}
