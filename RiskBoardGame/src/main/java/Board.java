@@ -641,3 +641,39 @@ public class Board extends TelegramLongPollingBot{
 		}
 
 	}
+	@Override
+	public void onUpdateReceived(Update update) {
+		if (update.hasMessage() && update.getMessage().hasText()) {
+			String first_name = update.getMessage().getChat().getFirstName();
+
+			String answer = "";
+            long user_id = update.getMessage().getChat().getId();
+            long chat_id = update.getMessage().getChatId();
+
+            String message_text = update.getMessage().getText();
+            
+            answer = checkCategory(first_name, user_id , message_text);
+ 
+            SendMessage message = new SendMessage() // Create a message object object
+                    .setChatId(chat_id)
+                    .setText(answer);
+           
+            try {
+                execute(message); // Sending our message object to user
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+            
+        }
+		
+	}
+
+    @Override
+    public String getBotUsername() {
+        return "RiskGameBot";
+    }
+
+    @Override
+    public String getBotToken() {
+        return "718366234:AAHZ64pich1qeITo4J2S8CmauBCfPSqCkQY";
+    }
