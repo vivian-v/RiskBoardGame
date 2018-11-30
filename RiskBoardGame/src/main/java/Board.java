@@ -35,7 +35,7 @@ public class Board extends TelegramLongPollingBot{
 	ArrayList<String> mapKeySets = new ArrayList<String>();
 	ArrayList<Integer> tradeNumLists = new ArrayList<Integer>();
 	Dice dice = new Dice();
-	private static Deck deck;
+	Deck deck;
 	
 	public Board(HashMap<String, Country> m, Deck d)	{
 		System.out.println("=^-^= Risk Board Game");
