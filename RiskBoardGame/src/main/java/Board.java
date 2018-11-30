@@ -561,3 +561,8 @@ public class Board extends TelegramLongPollingBot{
 
 		return true;	
 	}
+	public Country getCountry(String s)
+	{
+		Country fc = Map.get(s);
+		return fc;
+	}
