@@ -50,9 +50,9 @@ public class Board extends TelegramLongPollingBot{
 		this.currentPlayerIndex = 0;
 		this.numDeadPlayers = 0;
 		this.currentActionIndex = 0;
-		Board.Map = m;
+		this.Map = m;
 		this.botStart = true;
-		Board.deck = d;
+		this.deck = d;
 		this.lastAction = "";
 		tradeNumLists.add(3);
 		tradeNumLists.add(30);
@@ -76,6 +76,9 @@ public class Board extends TelegramLongPollingBot{
 		// TODO Auto-generated constructor stub
 	}
 	public int testGenerator()	{
+		this.Map = m;
+		this.deck = d;
+
 		Player np1 = new Player("test1", 1234, 50);
 		Player np2 = new Player("test2", 1234, 50);
 		Country cn1 = new Country("China");
