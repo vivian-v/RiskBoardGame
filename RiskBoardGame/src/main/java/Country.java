@@ -21,8 +21,7 @@ public class Country   {
 		for (int i = 1; i < n.length; i++)
 			this.ConnectedCountry.add(n[i]);
 	}
-	public ArrayList<String> getAdjacency()
-	{
+	public ArrayList<String> getAdjacency()	{
 		return this.ConnectedCountry;
 	}
 
@@ -38,8 +37,7 @@ public class Country   {
 		return this.numOfArmy; 
 	}
 	
-	public String getContinentName()
-	{
+	public String getContinentName()	{
 		return this.continentName;
 	}
 
