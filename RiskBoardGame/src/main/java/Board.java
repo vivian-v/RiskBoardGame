@@ -36,7 +36,7 @@ public class Board extends TelegramLongPollingBot{
 	ArrayList<Integer> tradeNumLists = new ArrayList<Integer>();
 	Dice dice = new Dice();
 	private static Deck deck;
-	
+	Setup set = new Setup();
 	public Board(HashMap<String, Country> m, Deck d)	{
 		System.out.println("=^-^= Risk Board Game");
 		this.numOfPlayers = 0;
@@ -76,9 +76,8 @@ public class Board extends TelegramLongPollingBot{
 		// TODO Auto-generated constructor stub
 	}
 	public int testGenerator()	{
-		this.Map = m;
-		this.deck = d;
-
+		this.Map = set.LoadMap();
+		this.deck = set.LoadDeck();
 		Player np1 = new Player("test1", 1234, 50);
 		Player np2 = new Player("test2", 1234, 50);
 		Country cn1 = new Country("China");
