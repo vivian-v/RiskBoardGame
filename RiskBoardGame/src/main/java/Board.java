@@ -632,3 +632,12 @@ public class Board extends TelegramLongPollingBot{
 		return "Done army placement";
 	}
 	
+		public void displayMapInfo()
+	{
+		System.out.format(format, "Index", "Region" ,"Country Name", "Land Owner", "Num of Army");
+		int i = 0;
+		for (String key : Map.keySet()) {
+		   System.out.format(format, ++i, Map.get(key).getContinentName(),Map.get(key).getCountryName(), Map.get(key).getOwnerName(), Map.get(key).getNumOfArmy());
+		}
+
+	}
