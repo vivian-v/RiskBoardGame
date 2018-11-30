@@ -576,3 +576,12 @@ public class Board extends TelegramLongPollingBot{
 	{
 		return getIndex(name);
 	}
+		public int getIndex(String name)
+	{
+		for(int i = 0; i < players.size(); i++)
+		{
+			if (players.get(i).getPlayerName().equals(name))
+				return i;
+		}
+		return -1;
+	}
