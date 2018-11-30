@@ -7,4 +7,4 @@ Refactor, refactor, refactor: Ask yourself:  can you implement classes with fewe
 
 
 [![Build Status](https://travis-ci.org/changjin86/aassdf111.svg?branch=master)](https://travis-ci.org/changjin86/aassdf111)
-[![codecov](https://codecov.io/gh/changjin86/aassdf111/branch/master/graph/badge.svg)](https://codecov.io/gh/changjin86/aassdf111)
+[![codecov](https://codecov.io/gh/changjin86/RiskBoardGame/branch/master/graph/badge.svg)](https://codecov.io/gh/changjin86/RiskBoardGame)
