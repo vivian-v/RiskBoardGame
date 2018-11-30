@@ -16,7 +16,7 @@ public class Risk {
 		ApiContextInitializer.init();
         TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
         try {
-            telegramBotsApi.registerBot(new Board(setup.LoadMap()));
+            telegramBotsApi.registerBot(new Board(setup.LoadMap(), setup.LoadDeck()));
 
         } catch (TelegramApiException e) {
             e.printStackTrace();
