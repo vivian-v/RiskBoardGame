@@ -18,14 +18,14 @@ public class TestBoard extends TestCase {
 	  @Test
 	  public void testReinforce(){
 	  	Board bd  = new Board(setup.LoadMap(), setup.LoadDeck());
-	  	bd.testGenerator();
+		  Board.testGenerator();
 	  	assertEquals("reinforce action", bd.reinforce(0));
 	
 	  }
 	    @Test
 	    public void testTradeInCard() throws IOException {
 	    	Board bd  = new Board(setup.LoadMap(), setup.LoadDeck());
-	    	bd.testGenerator();
+			  Board.testGenerator();
 	    	assertEquals(4, bd.tradeInCard(0));
 	    	assertEquals(0, bd.tradeInCard(1));
 	
@@ -43,7 +43,7 @@ public class TestBoard extends TestCase {
 	  public void testFortify()
 	  {
 		  Board bd = new Board(setup.LoadMap(), setup.LoadDeck());
-		  bd.testGenerator();
+		  Board.testGenerator();
 		  assertEquals("You can't fortify",bd.fortify(0, "Alberta", "China", 1));
 
 	  }
@@ -59,14 +59,14 @@ public class TestBoard extends TestCase {
 		  Board bd = new Board(setup.LoadMap(), setup.LoadDeck());
 		  assertFalse(bd.determineTurns());
 
-		  bd.testGenerator();
+		  Board.testGenerator();
 		  assertTrue(bd.determineTurns());
 	  }
 	  @Test
 	  public void testAttack()
 	  {
 		  Board bd = new Board(setup.LoadMap(), setup.LoadDeck());
-		  bd.testGenerator();
+		  Board.testGenerator();
 		  assertTrue(bd.attack(0, "Alaska", "Alberta").contains("test1"));
 		  assertEquals("You can't attack this country",bd.attack(0, "Alaska", "China"));
 		  assertTrue(bd.attack(0, "Alberta", "Alaska").contains("Lost"));
@@ -77,7 +77,7 @@ public class TestBoard extends TestCase {
 	  public void testAttack2()
 	  {
 		  Board bd = new Board(setup.LoadMap(), setup.LoadDeck());
-		  bd.testGenerator();
+		  Board.testGenerator();
 		  bd.setPlaceStart(true);
 		  bd.setOpenGameNum(1);
 		  bd.setGameStart(true);
@@ -87,7 +87,7 @@ public class TestBoard extends TestCase {
 	  public void testkillPlayer()
 	  {
 		  Board bd = new Board(setup.LoadMap(), setup.LoadDeck());
-		  bd.testGenerator();
+		  Board.testGenerator();
 		  assertEquals(1, bd.killPlayer(0));
 
 	  }
@@ -96,7 +96,7 @@ public class TestBoard extends TestCase {
 	  public void testTransferOwnership()
 	  {
 		  Board bd = new Board(setup.LoadMap(), setup.LoadDeck());
-		  bd.testGenerator();
+		  Board.testGenerator();
 		  assertTrue(bd.transferOwnership("Alaska", 0, "Alberta", 1));
 		  assertFalse(bd.transferOwnership("China", 0, "China", 1));
 	  }
@@ -105,10 +105,10 @@ public class TestBoard extends TestCase {
 	  public void testShowCountryValidation()
 	  {
 		  Board bd1 = new Board();
-		  bd1.testGenerator();
+		  Board.testGenerator();
 		  assertEquals("This country is not your country", bd1.showCountryValidation("test1", "China", 1));
 		  Board bd = new Board(setup.LoadMap(), setup.LoadDeck());
-		  bd.testGenerator();
+		  Board.testGenerator();
 		  assertTrue(bd.showCountryValidation("test1", "Alberta", 1).contains("Alaska"));
 		  assertEquals("This country is not your country", bd.showCountryValidation("test2", "Alberta", 1));
 		  assertEquals("Invalid Country Name", bd.showCountryValidation("test1", "test", 1));
@@ -118,7 +118,7 @@ public class TestBoard extends TestCase {
 	  @Test
 	  public void testCheckAttackableOrFortifiable() {
 		  Board bd = new Board(setup.LoadMap(), setup.LoadDeck());
-		  bd.testGenerator();
+		  Board.testGenerator();
 		  
 		  assertEquals(-1, bd.checkAttackableOrFortifiable("test1", "test"));
 		  assertEquals(-2, bd.checkAttackableOrFortifiable("test1", "Alaska"));
@@ -129,7 +129,7 @@ public class TestBoard extends TestCase {
 	  @Test
 	  public void testGetPlayerIndex() {
 		  Board bd = new Board(setup.LoadMap(), setup.LoadDeck());
-		  bd.testGenerator();
+		  Board.testGenerator();
 
 		  assertEquals(0, bd.getPlayerIndex("test1"));
 
@@ -139,7 +139,7 @@ public class TestBoard extends TestCase {
 	  public void testCheckCategory()
 	  {
 		  Board bd = new Board(setup.LoadMap(), setup.LoadDeck());
-		  bd.testGenerator();
+		  Board.testGenerator();
 		  assertEquals("Failed to setup number of players", bd.checkCategory("test1", 12345, "=creategame 1 123"));
 		  assertEquals("Created a new game. ID : 333", bd.checkCategory("test1", 12345, "=creategame 2 333"));
 		  assertEquals("Failed to create a game", bd.checkCategory("test1", 12345, "=creategame"));
@@ -216,7 +216,7 @@ public class TestBoard extends TestCase {
 		  assertEquals("Created a new game. ID : 444", bd.checkCategory("test1", 12345, "=creategame 3 444"));
 		  bd.setGameStart(false);
 		  assertTrue(bd.checkCategory("test3", 12345, "=join 444").contains("join"));
-		  bd.testGenerator();
+		  Board.testGenerator();
 		  assertTrue(bd.checkCategory("test1", 12345, "=placement").contains("=placement"));
 		 
 		  assertTrue(bd.checkCategory("test", 12345, "=reinforce").contains("test3")); 
@@ -248,7 +248,7 @@ public class TestBoard extends TestCase {
 	  public void testCheckCountryInCardsOwned() {
 		  String[] c1 = {"China", "Alberta", "Ural"};
 		  Board bd = new Board(setup.LoadMap(), setup.LoadDeck());
-		  bd.testGenerator();
+		  Board.testGenerator();
 		  assertEquals(2, bd.checkCountryInCardsOwned(0, c1));
 		  
 	  }
@@ -279,7 +279,7 @@ public class TestBoard extends TestCase {
 	  public void testCheckCategory4()
 	  {
 		  Board bd = new Board(setup.LoadMap(), setup.LoadDeck());
-		  bd.testGenerator();
+		  Board.testGenerator();
 		  assertEquals("Not correct action", bd.checkCategory("test", 12345, "=fortify"));
 		  bd.increaseCurrentActionIndex();
 		  bd.increaseCurrentActionIndex();
@@ -297,7 +297,7 @@ public class TestBoard extends TestCase {
 	  public void testShowFortifiable()
 	  {
 		  Board bd = new Board(setup.LoadMap(), setup.LoadDeck());
-		  bd.testGenerator();
+		  Board.testGenerator();
 		  assertEquals("invalid input", bd.checkCategory("test", 12345, "=showfortifiable"));
 		  assertTrue(bd.checkCategory("test1", 12345, "=showfortifiable Kamchatka").contains("lists"));
 
@@ -306,7 +306,7 @@ public class TestBoard extends TestCase {
 	  public void testArmyPlacement()
 	  {
 		  Board bd = new Board(setup.LoadMap(), setup.LoadDeck());
-		  bd.testGenerator();
+		  Board.testGenerator();
 		  assertTrue(bd.armyPlacement().contains("Done"));
 		  bd.setPlaceStart(true);
 		  assertEquals("Placement has done already", bd.checkCategory("test1", 12345, "=placement"));
@@ -316,7 +316,7 @@ public class TestBoard extends TestCase {
 	  public void testShowCurrentAction()
 	  {
 		  Board bd = new Board(setup.LoadMap(), setup.LoadDeck());
-		  bd.testGenerator();
+		  Board.testGenerator();
 		  assertTrue(bd.checkCategory("test1", 12345, "=showcurrentaction").contains("reinforce"));
 		  bd.increaseCurrentActionIndex();
 		  assertTrue(bd.checkCategory("test1", 12345, "=showcurrentaction").contains("attack"));
