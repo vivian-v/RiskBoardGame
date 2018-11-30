@@ -143,7 +143,7 @@ public class TestBoard extends TestCase {
 		  assertEquals("Failed to setup number of players", bd.checkCategory("test1", 12345, "=creategame 1 123"));
 		  assertEquals("Created a new game. ID : 333", bd.checkCategory("test1", 12345, "=creategame 2 333"));
 		  assertEquals("Failed to create a game", bd.checkCategory("test1", 12345, "=creategame"));
-		  assertTrue(bd.checkCategory("test1", 12345, "/help").length() == 331);
+		  assertTrue(bd.checkCategory("test1", 12345, "/help").length() == 337);
 		  assertTrue(bd.checkCategory("test1", 12345, "=showgameid").contains("333"));
 		  assertEquals("You are already in the game",bd.checkCategory("test2", 12345, "=join 333"));
 		  
