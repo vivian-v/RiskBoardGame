@@ -585,3 +585,50 @@ public class Board extends TelegramLongPollingBot{
 		}
 		return -1;
 	}
+		public String armyPlacement()
+	{
+		boolean firstRound = false;
+		int playerIndex = 0;
+		String pickedCountry;
+		int i = 0;
+		while (players.get(this.numOfPlayers - 1).getNumOfTroops()> 0)
+		{
+			if (!firstRound)
+			{
+				pickedCountry = this.mapKeySets.get(i);
+				Map.get(pickedCountry).setOwnerName(players.get(playerIndex).getPlayerName());
+				Map.get(pickedCountry).addNumOfArmy(1);
+				players.get(playerIndex).loseNumOfTroops(1);
+				players.get(playerIndex).takeCountry(Map.get(pickedCountry));
+				playerIndex++;
+				if (playerIndex == this.numOfPlayers)
+					playerIndex = 0;
+				i++;
+				if (i == this.mapKeySets.size())
+				{	
+					i = 0;
+					firstRound = true;
+				}
+			} else
+			{
+				pickedCountry = this.mapKeySets.get(i);
+				if (Map.get(pickedCountry).getOwnerName().equals(players.get(playerIndex).getPlayerName()))
+				{
+					Map.get(pickedCountry).addNumOfArmy(1);
+					players.get(playerIndex).loseNumOfTroops(1);
+					playerIndex++;
+					if (playerIndex == this.numOfPlayers)
+						playerIndex = 0;
+					i++;
+					if (i == this.mapKeySets.size())
+					{	
+						i = 0;
+					}
+				}
+			}
+		}
+
+		
+		return "Done army placement";
+	}
+	
