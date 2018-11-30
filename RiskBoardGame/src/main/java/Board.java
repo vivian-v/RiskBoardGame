@@ -566,3 +566,8 @@ public class Board extends TelegramLongPollingBot{
 		Country fc = Map.get(s);
 		return fc;
 	}
+		public int getPlayerIndexFromCountry(String c)
+	{
+		String name = Map.get(c).getOwnerName();
+		return getIndex(name);
+	}
