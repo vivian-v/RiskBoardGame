@@ -576,7 +576,7 @@ public class Board extends TelegramLongPollingBot{
 	{
 		return getIndex(name);
 	}
-		public int getIndex(String name)
+	public int getIndex(String name)
 	{
 		for(int i = 0; i < players.size(); i++)
 		{
@@ -585,7 +585,7 @@ public class Board extends TelegramLongPollingBot{
 		}
 		return -1;
 	}
-		public String armyPlacement()
+	public String armyPlacement()
 	{
 		boolean firstRound = false;
 		int playerIndex = 0;
@@ -632,7 +632,7 @@ public class Board extends TelegramLongPollingBot{
 		return "Done army placement";
 	}
 	
-		public void displayMapInfo()
+	public void displayMapInfo()
 	{
 		System.out.format(format, "Index", "Region" ,"Country Name", "Land Owner", "Num of Army");
 		int i = 0;
@@ -641,6 +641,216 @@ public class Board extends TelegramLongPollingBot{
 		}
 
 	}
+	public String checkCategory(String userName, long user_id, String txt)
+	{
+		String delim = " ";
+		String[] tokens = txt.split(delim);
+		String tempStr = "";
+		if (txt.contains("=creategame"))
+		{
+			if (tokens.length < 3 || openGameNum > 0)
+				return "Failed to create a game";	
+			
+			if (Integer.parseInt(tokens[1]) < 2 || Integer.parseInt(tokens[1]) > 6)
+				return "Failed to setup number of players";
+			
+			openGameNum = 1;
+			this.numOfPlayers = Integer.parseInt(tokens[1]);
+			this.numTroops = 40 - ((this.numOfPlayers - 2) * 5);
+			this.gameID = tokens[2];
+			
+			return "Created a new game. ID : " + tokens[2];
+		} else if (txt.equals("/help"))
+		{
+			return showAllCommands();
+		} else if (txt.contains("=showgameid"))
+		{
+			return (this.gameID.length() == 0) ? "There is no game open" : "Game ID : " + this.gameID + "\nCurrent num participants : " + this.numParticipants
+					+ "\nExpected num participants : " + this.numOfPlayers;
+		} else if (txt.contains("=join"))
+		{
+			if (tokens.length < 2)
+			{
+				return "Failed to join the game";
+			} else 
+			{		
+				for (int i = 0; i < players.size(); i++)
+				{
+					if (!tokens[1].equals(this.gameID))
+						return "Game ID is not valid";
+					if (players.get(i).getPlayerName().equals(userName))
+						return "You are already in the game";
+				}
+				if (!this.gameID.equals(tokens[1]))
+					return "Invalid Game ID";
+				else if (this.gameStart == true)
+					return "The game is full";
+		
+				this.numParticipants++;
+				Player newPlayer = new Player(userName, user_id, this.numTroops);
+				players.add(newPlayer);
+				
+				if (this.numParticipants == this.numOfPlayers)
+				{
+					this.gameStart = true;
+					botResponseToAll("Game Start\n" + "The Current Turn : " + players.get(0).getPlayerName());
+    
+				}
+				return "Successfully join the game";
+			}
+		} else if (txt.equals("=showallplayers"))
+		{
+			String str = "";
+			for (int i = 0; i < players.size(); i++)
+			{
+				str += (i+1) + " : " + players.get(i).getPlayerName() + "\n";
+			}
+			return str;
+		} else if (txt.equals("=myinfo"))
+		{
+			if (!gameStart)
+				return "Game hasn't started yet";
+			
+			for (int i = 0; i < players.size(); i++)
+			{
+				if (players.get(i).getPlayerName().equals(userName))
+					return "My Name : " + players.get(i).getPlayerName() + "\nMy Number of Troops : " 
+						+ players.get(i).getNumOfTroops() + "\nMy Number of Conquered Countries : " 
+						+ players.get(i).getNumConquered() + "\nMy Number of Owned Countries : "
+						+ players.get(i).getOwnedCountries().size();  
+			}
+			
+			return "Failed to show info";
+		} else if (txt.equals("=placement"))
+		{
+			if (placeStart)
+				return "Placement has done already";
+			
+			placeStart = true;
+			botResponseToAll(userName + " starts the placement\n");
+			botResponseToAll(armyPlacement());
+	
+		} else if (txt.equals("=mapinfo"))
+		{
+			this.displayMapInfo();
+		} else if (txt.contains("=attack"))
+		{
+			if (!(this.currentActionIndex == 1))
+				return "Not correct action";
+			if (tokens.length < 3 )
+				return "invalid input";	
+			if (!gameStart || openGameNum == 0)
+				return "Game hasn't started yet";
+			if (currentPlayerIndex != getPlayerIndex(userName))
+				return "Not your turn. Current Turn : " + players.get(currentPlayerIndex).getPlayerName();
+			
+			botResponseToAll(attack(currentPlayerIndex, tokens[1], tokens[2]));
+		} else if (txt.contains("=showattackable"))
+		{
+			if (tokens.length < 2 )
+				return "invalid input";
+			
+			return showCountryValidation(userName, tokens[1], 1);
+			
+		} else if (txt.equals("=doneaction") && placeStart) {
+			if (!gameStart || openGameNum == 0)
+				return "Game hasn't started yet";
+			if (currentPlayerIndex != getPlayerIndex(userName))
+				return "Not your turn. Current Turn : " + players.get(currentPlayerIndex).getPlayerName();
+			
+			if (this.currentActionIndex == 2)
+			{
+				this.currentActionIndex = 0;
+				this.lastAction = "";
+				String cpname = players.get(currentPlayerIndex).getPlayerName();
+				String npname = (currentPlayerIndex == this.numOfPlayers - 1) ? players.get(0).getPlayerName() : players.get(currentPlayerIndex + 1).getPlayerName();
+				this.currentPlayerIndex = (this.currentPlayerIndex == this.numOfPlayers - 1) ? 0 : (this.currentPlayerIndex + 1);
+				botResponseToAll(cpname + "'s turn is over\n" + "Now, " + npname + "'s turn");
+			} else
+			{
+				if (this.currentActionIndex == 0)
+				{
+					this.currentActionIndex++;
+					return "Now action : attack";
+				} else if (this.currentActionIndex == 1)
+				{
+					this.currentActionIndex++;
+					return "Now action : fortify";
+				}
+				
+			}
+		} else if (txt.equals("=showturns"))
+		{
+			if (!gameStart || openGameNum == 0)
+				return "Game hasn't started yet";
+			tempStr = " > ";
+			for (int i = 0; i < this.numOfPlayers; i++)
+			{
+				tempStr += players.get(i).getPlayerName() + " > ";
+			}
+			tempStr += "\nCurrent Player : " + players.get(this.currentPlayerIndex).getPlayerName();
+
+
+			
+			return tempStr;
+		} else if (txt.equals("=determineturns"))
+		{
+			if (!gameStart || openGameNum == 0)
+				return "Game hasn't started yet";
+//			if (this.determineTurnsStart)
+//				return "Placement has done already";
+			this.determineTurns();
+		} else if (txt.equals("=reinforce"))
+		{
+			if (!(this.currentActionIndex == 0))
+				return "Not correct action";
+			if (!gameStart || openGameNum == 0)
+				return "Game hasn't started yet";
+			if (currentPlayerIndex != getPlayerIndex(userName))
+				return "Not your turn. Current Turn : " + players.get(currentPlayerIndex).getPlayerName();
+			if (this.lastAction.equals("reinforce"))
+				return "You reinforced already";
+			
+			this.lastAction = "reinforce";
+			return reinforce(this.currentPlayerIndex);
+			
+		} else if (txt.contains("=fortify") )
+		{
+			if (!(this.currentActionIndex == 2))
+				return "Not correct action";
+			if (tokens.length < 4)
+				return "invalid input";	
+			if (!gameStart || openGameNum == 0)
+				return "Game hasn't started yet";
+			if (currentPlayerIndex != getPlayerIndex(userName))
+				return "Not your turn. Current Turn : " + players.get(currentPlayerIndex).getPlayerName();
+			if (this.lastAction.equals("fortify"))
+				return "You fortified already";
+			
+			this.lastAction = "fortify";
+			return fortify(this.currentPlayerIndex, tokens[1], tokens[2], Integer.parseInt(tokens[3]));
+			
+		} else if (txt.contains("=showfortifiable"))
+		{
+			
+			if (tokens.length < 2 )
+				return "invalid input";
+			return showCountryValidation(userName, tokens[1], 2);
+
+		} else if (txt.equals("=showcurrentaction"))
+		{
+			if (this.currentActionIndex == 0)
+				return "Current Action : reinforce";
+			else if (this.currentActionIndex == 1)
+				return "Current Action : attack";
+			else if (this.currentActionIndex == 2)
+				return "Current Action : fortify";
+		}
+		
+		
+		return "The action you just did : " + txt;
+	}
+	
 	@Override
 	public void onUpdateReceived(Update update) {
 		if (update.hasMessage() && update.getMessage().hasText()) {
@@ -677,3 +887,6 @@ public class Board extends TelegramLongPollingBot{
     public String getBotToken() {
         return "718366234:AAHZ64pich1qeITo4J2S8CmauBCfPSqCkQY";
     }
+
+	
+}
