@@ -540,6 +540,7 @@ public class Board extends TelegramLongPollingBot{
 
 		return countryLists;
 	}
+
 	public int checkAttackableOrFortifiable(String name, String country)
 	{
 		if (!Map.containsKey(country))
@@ -566,8 +567,12 @@ public class Board extends TelegramLongPollingBot{
 		Country fc = Map.get(s);
 		return fc;
 	}
-		public int getPlayerIndexFromCountry(String c)
+	public int getPlayerIndexFromCountry(String c)
 	{
 		String name = Map.get(c).getOwnerName();
+		return getIndex(name);
+	}
+	public int getPlayerIndex(String name)
+	{
 		return getIndex(name);
 	}
