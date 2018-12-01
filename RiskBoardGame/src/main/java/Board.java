@@ -103,11 +103,9 @@ public class Board extends TelegramLongPollingBot{
 		np1.takeCountry(cn3);
 		players.add(np1);
 		players.add(np2);
-		
-		setNumOfPlayers(2);
-		setGameStart(true);
-		setBotStart(false);
-
+		this.numOfPlayers = 2;
+		this.gameStart = true;
+		this.botStart = false;
 		return players.size();
 	}
 	public void setNumOfPlayers(int n)
