@@ -887,6 +887,38 @@ public class Board extends TelegramLongPollingBot{
     public String getBotToken() {
         return "718366234:AAHZ64pich1qeITo4J2S8CmauBCfPSqCkQY";
     }
-
+public int testGenerator()	{
+		Player np1 = new Player("test1", 1234, 50);
+		Player np2 = new Player("test2", 1234, 50);
+		Country cn1 = new Country("China");
+		Country cn2 = new Country("Alberta");
+		Country cn3 = new Country("Ural");
+		Country cn4 = new Country("Kamchatka");
+		Card c1 = new Card("test", "solider");
+		Card c2 = new Card("test", "horse");
+		Card c3 = new Card("test", "cannon");
+		Card c4 = new Card("test", "wild");
+		Map.get("Alberta").setOwnerName("test1");
+		Map.get("Alberta").addNumOfArmy(5);
+		Map.get("China").setCountryName("test1");
+		Map.get("China").addNumOfArmy(1);
+		Map.get("Alaska").setOwnerName("test2");
+		Map.get("Alaska").addNumOfArmy(2);
+		Map.get("Kamchatka").setOwnerName("test1");
+		Map.get("Kamchatka").addNumOfArmy(2);
+		np1.addCard(c1);
+		np1.addCard(c2);
+		np1.addCard(c3);
+		np1.addCard(c4);
+		np1.takeCountry(cn1);
+		np1.takeCountry(cn2);
+		np1.takeCountry(cn3);
+		players.add(np1);
+		players.add(np2);
+		this.numOfPlayers = 2;
+		this.gameStart = true;
+		this.botStart = false;
+		return players.size();
+	}
 	
 }
